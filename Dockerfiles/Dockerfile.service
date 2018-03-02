@@ -1,0 +1,9 @@
+FROM alpine:edge
+RUN apk update
+RUN apk add python3
+RUN adduser -h /home/reflect/ -D reflect reflect
+RUN chown -R reflect:reflect /home/reflect
+WORKDIR /home/reflect
+COPY reflect.py /home/reflect
+USER reflect
+CMD python3 reflect.py
