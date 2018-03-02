@@ -21,7 +21,7 @@ usage:
 include config.mk
 include include/setup.mk
 
-run: network run-eepsite run-website
+run: network run-eepsite run-service
 
 run-eepsite: network
 	docker run -d --name fingerprint-eepsite \
@@ -36,7 +36,7 @@ run-eepsite: network
 		--restart always \
 		eyedeekay/colluding_sites_attack_eepsite
 
-run-website: network
+run-service: network
 	docker run -d --name fingerprint-service \
 		--network fingerprint \
 		--network-alias fingerprint-service \
