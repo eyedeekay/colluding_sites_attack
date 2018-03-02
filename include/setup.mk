@@ -39,3 +39,9 @@ log-eepsite:
 
 log-service:
 	docker logs fingerprint-service
+
+update: clean build run
+
+update-service: clean-service build-service run-service
+
+update-eepsite: clean-eepsite build-eepsite run-eepsite
