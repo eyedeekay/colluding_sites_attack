@@ -1,6 +1,6 @@
 FROM alpine:edge
 RUN apk update
-RUN apk add go go-tools go-doc git make musl-dev musl musl-utils #python3
+RUN apk add go go-tools git make musl-dev musl musl-utils #python3
 RUN adduser -h /home/reflect/ -D reflect reflect
 RUN chown -R reflect:reflect /home/reflect
 WORKDIR /home/reflect
