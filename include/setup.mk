@@ -6,9 +6,11 @@ network:
 log-network:
 	docker network inspect fingerprint
 
-clean-network: clean
+clean-network:
 	rm -f network
 	docker network rm fingerprint; true
+
+redo-network: clean-network network
 
 build: build-eepsite build-service
 
