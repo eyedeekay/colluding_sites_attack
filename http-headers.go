@@ -11,6 +11,7 @@ type blah struct{}
 func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     log.Println("the echo service is responding.")
 	for key, value := range r.Header {
+        log.Println(key, value)
 		fmt.Fprintf(w, "Temos o header: %s, com valor %s\n", key, value)
 	}
 }

@@ -41,9 +41,15 @@ run-service: network
 		--network fingerprint \
 		--network-alias fingerprint-service \
 		--hostname fingerprint-service \
+		-p 8080:8080 \
 		--restart always \
 		eyedeekay/colluding_sites_attack_service
 
 list:
 	./tunlist
 
+test-classic:
+	./test.sh
+
+test-newhotness:
+	./test.sh n
