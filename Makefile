@@ -43,3 +43,22 @@ run-website: network
 		--hostname fingerprint-service \
 		--restart always \
 		eyedeekay/colluding_sites_attack_service
+
+list:
+	/usr/bin/lynx -dump -list-inline 127.0.0.1:7072/?page=i2p_tunnels | \
+		grep -A 1 'page=local_destination&b32='  | \
+		sed 's|  \[||g'  | \
+		sed 's|  ||g'  | \
+		sed 's|  ||g'  | \
+		tr ' ' ' ' | \
+		sed -e ':a' -e 'N' -e '8318ba' -e 's/\n/ /g'  | \
+		tr -d '⇐' | tr -d '.' | \
+		sed -e ':a' -e 'N' -e '8318ba' -e 's/\n/ /g'  | \
+		tr -d ' ' | \
+		sed 's|]| |g' | \
+		sed 's|--|+|g' | \
+		tr '+' "\n" | \
+		tr -d '
+	' | \
+		tr  '\n' |
+		sed 's|http://127001:7072/?page=local_destination&b32=||g'
