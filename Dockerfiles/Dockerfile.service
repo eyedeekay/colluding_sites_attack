@@ -6,4 +6,4 @@ RUN chown -R reflect:reflect /home/reflect
 WORKDIR /home/reflect
 COPY reflect.py /home/reflect
 USER reflect
-CMD ./reflect.py
+CMD python3 reflect.py
