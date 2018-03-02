@@ -7,4 +7,4 @@ WORKDIR /home/reflect
 COPY http-headers.go /home/reflect
 USER reflect
 RUN go build -o http-headers http-headers.go
-CMD http-headers
+CMD ./http-headers
