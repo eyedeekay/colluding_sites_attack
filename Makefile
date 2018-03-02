@@ -31,7 +31,7 @@ run-eepsite: network
 		--expose 4567 \
 		--link fingerprint-service \
 		-p :4567 \
-		-p 127.0.0.1:7071:7071 \
+		-p 127.0.0.1:7072:7072 \
 		--volume $(i2pd_dat):/var/lib/i2pd:rw \
 		--restart always \
 		eyedeekay/colluding_sites_attack_eepsite
