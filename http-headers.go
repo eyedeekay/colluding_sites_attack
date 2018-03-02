@@ -20,7 +20,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     */
 	for key, value := range r.Header {
         log.Println(key, value)
-		fmt.Fprintf(w, "Temos o header: %s, com valor %s\n", key, value)
+		fmt.Fprintf(w, "Header: %s, Value: %s\n", key, value)
 	}
 
     /*
