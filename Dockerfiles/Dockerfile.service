@@ -1,9 +1,10 @@
 FROM alpine:edge
 RUN apk update
-RUN apk add python3
+RUN apk add go go-tools go-doc git make musl-dev musl musl-utils #python3
 RUN adduser -h /home/reflect/ -D reflect reflect
 RUN chown -R reflect:reflect /home/reflect
 WORKDIR /home/reflect
-COPY reflect.py /home/reflect
+COPY http-headers.go /home/reflect
 USER reflect
+RUN go build -o http-headers http-headers.go
 CMD python3 reflect.py
