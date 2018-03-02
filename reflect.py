@@ -19,11 +19,11 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_header("Set-Cookie", "foo=bar")
         self.end_headers()
 
-        self.wfile.write("<html><head><title>Your X-I2P-DEST* headers are:</title></head>")
-        self.wfile.write("<body><pre><code>")
-        self.wfile.write(self.headers)
-        self.wfile.write("</code></pre>")
-        self.wfile.write("</body></html>")
+#        self.wfile.write("<html><head><title>Your X-I2P-DEST* headers are:</title></head>")
+#        self.wfile.write("<body><pre><code>")
+#        self.wfile.write(self.headers)
+#        self.wfile.write("</code></pre>")
+#        self.wfile.write("</body></html>")
 
     def do_POST(self):
 
@@ -43,11 +43,12 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         self.send_response(200)
         self.end_headers()
-        self.wfile.write("<html><head><title>Your X-I2P-DEST* headers are:</title></head>")
-        self.wfile.write("<body><pre><code>")
-        self.wfile.write(self.headers)
-        self.wfile.write("</code></pre>")
-        self.wfile.write("</body></html>")
+
+#        self.wfile.write("<html><head><title>Your X-I2P-DEST* headers are:</title></head>")
+#        self.wfile.write("<body><pre><code>")
+#        self.wfile.write(self.headers)
+#        self.wfile.write("</code></pre>")
+#        self.wfile.write("</body></html>")
 
     do_PUT = do_POST
     do_DELETE = do_GET
