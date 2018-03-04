@@ -49,7 +49,18 @@ list:
 	./tunlist
 
 test-classic:
-	./test.sh
+	./test.sh | tee test.oldproxy.log
 
 test-newhotness:
-	./test.sh n
+	./test.sh n | tee test.newproxy.log
+
+diff:
+	diff test.oldproxy.log test.newproxy.log
+
+easysurf:
+	http_proxy=http://127.0.0.1:4443 surf http://i2p-projekt.i2p
+
+surf:
+	http_proxy=http://127.0.0.1:4443 surf http://lqnwvwsgio6k53zq6d7r5bpaxuslc45vgsiqo6i3ebshkqpgrnma.b32.i2p
+	http_proxy=http://127.0.0.1:4443 surf http://zcofypupen75rdv5zihviweyw5emk2l34idq423kbhj7n3owoe5a.b32.i2p
+	http_proxy=http://127.0.0.1:4443 surf http://zjjjd756aucwz3pa2fl4mb3po2wtf752aefpod4gvedwreeox52q.b32.i2p
