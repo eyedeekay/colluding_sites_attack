@@ -21,7 +21,7 @@ usage:
 include config.mk
 include include/setup.mk
 
-run: network run-eepsite run-service
+run: network run-eepsite run-service run-website
 
 run-eepsite: network
 	docker run -d --name fingerprint-eepsite \
