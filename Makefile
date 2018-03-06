@@ -72,3 +72,6 @@ surf:
 	http_proxy=http://127.0.0.1:4443 surf http://lqnwvwsgio6k53zq6d7r5bpaxuslc45vgsiqo6i3ebshkqpgrnma.b32.i2p
 	http_proxy=http://127.0.0.1:4443 surf http://zcofypupen75rdv5zihviweyw5emk2l34idq423kbhj7n3owoe5a.b32.i2p
 	http_proxy=http://127.0.0.1:4443 surf http://zjjjd756aucwz3pa2fl4mb3po2wtf752aefpod4gvedwreeox52q.b32.i2p
+
+visit:
+	http_proxy=http://127.0.0.1:4444 surf http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p
