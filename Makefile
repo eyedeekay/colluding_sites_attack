@@ -45,6 +45,15 @@ run-service: network
 		--restart always \
 		eyedeekay/colluding_sites_attack_service
 
+run-website: network
+	docker run -d --name fingerprint-website \
+		--network fingerprint \
+		--network-alias fingerprint-website \
+		--hostname fingerprint-website \
+		-p 8080:8080 \
+		--restart always \
+		eyedeekay/colluding_sites_attack_website
+
 list:
 	./tunlist
 

@@ -1,0 +1,6 @@
+FROM alpine:edge
+RUN apk update
+RUN apk add darkhttpd
+COPY css/styles.css /www/css/styles.css
+COPY index.html /www/index.html
+CMD darkhttpd /www --port 8081

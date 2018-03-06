@@ -1,0 +1,83 @@
+
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>How Colluding Sites can Identify You</title>
+  <meta name="description" content="How Colluding Sites can Identify You">
+  <meta name="author" content="idk">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+</head>
+
+<body>
+
+<h1>How Colluding Sites can Identify You</h1>
+
+<p>This is a dangerous web site! In fact, pretty much all web sites are
+dangerous in theory. But this one's about the theory, so that makes it even
+more dangerous.</p>
+
+<p></p>
+
+<h2>X-I2P-Dest* Fingerprinting</h2>
+
+<ul>
+<li><a href="http://lqnwvwsgio6k53zq6d7r5bpaxuslc45vgsiqo6i3ebshkqpgrnma.b32.i2p">Fingerprinting Site 1:</a> </li>
+<li><a href="http://zcofypupen75rdv5zihviweyw5emk2l34idq423kbhj7n3owoe5a.b32.i2p">Fingerprinting Site 2:</a></li>
+<li><a href="http://zjjjd756aucwz3pa2fl4mb3po2wtf752aefpod4gvedwreeox52q.b32.i2p">Fingerprinting Site 3:</a></li>
+</ul>
+
+<h2>The service code:</h2>
+
+<p>This is the code to the services behind those links, which will reveal your
+unique i2p destination.</p>
+
+<pre><code>    package main
+
+    import (
+        "fmt"
+        "log"
+        "net/http"
+    )
+
+    type blah struct{}
+
+    func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+        log.Println("the echo service is responding.")
+        /*
+        fmt.Fprintf(w, "\n")
+
+        */
+        fmt.Fprintf(w, "&lt;!DOCTYPE html&gt;\n")
+        fmt.Fprintf(w, "&lt;html&gt;\n")
+        fmt.Fprintf(w, "&lt;head&gt;\n")
+        fmt.Fprintf(w, "  &lt;title&gt; What is my Base64? &lt;/title&gt;\n")
+        fmt.Fprintf(w, "&lt;/head&gt;\n")
+
+        fmt.Fprintf(w, "  &lt;body&gt;\n")
+        fmt.Fprintf(w, "    &lt;pre&gt;&lt;code&gt;\n")
+        for key, value := range r.Header {
+            log.Println(key, value)
+            fmt.Fprintf(w, "Header: %s, Value: %s\n", key, value)
+        }
+        fmt.Fprintf(w, "    &lt;/pre&gt;&lt;/code&gt;\n")
+        fmt.Fprintf(w, "  &lt;/body&gt;\n")
+        fmt.Fprintf(w, "&lt;/html&gt;\n")
+        /*
+
+        fmt.Fprintf(w, "\n")
+
+        */
+    }
+
+    func main() {
+        log.Println("starting go echo service")
+        log.Fatal(http.ListenAndServe("0.0.0.0:8080", &amp;blah{}))
+    }
+</code></pre>
+
+</body>
