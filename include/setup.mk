@@ -60,4 +60,4 @@ update-service: clean-service build-service run-service
 
 update-eepsite: clean-eepsite build-eepsite run-eepsite
 
-update-eepsite: clean-website build-website run-website
+update-website: clean-website build-website run-website
