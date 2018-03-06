@@ -30,6 +30,7 @@ run-eepsite: network
 		--hostname fingerprint-eepsite \
 		--expose 4567 \
 		--link fingerprint-service \
+		--link fingerprint-website \
 		-p :4567 \
 		-p 127.0.0.1:7072:7072 \
 		--volume $(i2pd_dat):/var/lib/i2pd:rw \
@@ -41,7 +42,7 @@ run-service: network
 		--network fingerprint \
 		--network-alias fingerprint-service \
 		--hostname fingerprint-service \
-		-p 8080:8080 \
+		-p 127.0.0.1:8080:8080 \
 		--restart always \
 		eyedeekay/colluding_sites_attack_service
 
@@ -51,6 +52,7 @@ run-website: network
 		--network-alias fingerprint-website \
 		--hostname fingerprint-website \
 		--restart always \
+		-p 127.0.0.1:8081:8081 \
 		eyedeekay/colluding_sites_attack_website
 
 list:
