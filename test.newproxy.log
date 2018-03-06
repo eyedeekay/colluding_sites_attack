@@ -1,0 +1,48 @@
+/usr/bin/curl -x '127.0.0.1:4443' -L lqnwvwsgio6k53zq6d7r5bpaxuslc45vgsiqo6i3ebshkqpgrnma.b32.i2p
+<!DOCTYPE html>
+<html>
+<head>
+  <title> What is my Base64? </title>
+</head>
+  <body>
+    <pre><code>
+Header: User-Agent, Value: [MYOB/6.66 (AN/ON)]
+Header: Accept-Encoding, Value: [gzip]
+Header: X-I2p-Destb32, Value: [hlu5tme2dvtkthh5qweqjmfqjnmoeo4uolm37p5xeholfdmvpv7q.b32.i2p]
+Header: X-I2p-Desthash, Value: [OunZsJodZqmc~YWJBLCwS1jiO5Ry2b-~tyHcso2VfX8=]
+Header: X-I2p-Destb64, Value: [7sWPpCWlg9o8c6uYZR3jaFKKzRDfYEqlTMYy~-Tu~fHPcUhmvnEFwc4XKGLu-AtyDGzzyR9oZ9oI4CEolcx~kjyYqoe9VZOp843YAOKncU7zWivnCqU14lOIzIqEXMIl7NgC7z9-A-oBmys6S4FeeeJnroN-NOcEcqc-d1s~Die1azf9qnd0Eu4MbmN-d7R8NzKuJkk19I3b~I4ycGjzuI8gLCDk~Wb8k73jW7UjCPF9MOCCHacfaafayZRzQ5FIyGd1M2ZO-mIw8kAUb3mgIpXvhPsHUFXrLL4Yjmd0J0iSA0Xuzco1uhGbltEedgiHsnKiP5ZDgoyxSYDWmK6C4xoQRcs2xeuWdM70x98g9Sdv8pf3QTr2L07H-7dxWjALnaP7KCuhHOmn9ByzgwUqvk8Z2i0ing7Mktemv5FoTuUiLxTy3n20LyWb7JLwEUVWzS1tteWdzslnLGZoaSuVR43JEn-1EpiTKApAipfjTv0~w7~HKWael90YUQkHHwCUAAAA]
+    </pre></code>
+  </body>
+</html>
+/usr/bin/curl -x '127.0.0.1:4443' -L zcofypupen75rdv5zihviweyw5emk2l34idq423kbhj7n3owoe5a.b32.i2p
+<!DOCTYPE html>
+<html>
+<head>
+  <title> What is my Base64? </title>
+</head>
+  <body>
+    <pre><code>
+Header: Accept-Encoding, Value: [gzip]
+Header: X-I2p-Destb32, Value: [66fvj5rfyrebiaotchb2elywp4rk5kvb77r63dfafubepct23ura.b32.i2p]
+Header: X-I2p-Desthash, Value: [94tU9iXESBQB0xHDoi8WfyKuqqH~4-2MoC0CR4p63SI=]
+Header: X-I2p-Destb64, Value: [~ihlfVPQLM50DalvEY9yNJjOghxk9kuyxHni4fVxMf1MY9NYRorygib8YILmy2uTyBcbo-GXAHW0gHQcGexYUjASnRqMb0PbvKHgg~23uJQB16AZL6W6VYhPItLUBAItGsPHeUNP8B8~kG8RRnpLtp1rqTJucGCiJ91G9s02w~REEe6A56AztVVFZuvYyVComvWUT0RCnJYXPqbypORK9~2D630r3A6vhIKUWWCecGdaWtIBh6PkJyKeylZb16ve9r10~U6Jzc-XQ~5isN6eu5WU~ve~ZgG75VyDQjPm2buL~J8Ml0xPkqRxY~Sr8N912Iz7KCKb8vF7Er6LA~IT~RYrBO4kYDdrBLOzKFz94jcVfRApaiPn0mg4rwuzzQPgsprWbXUeucKKUK698JR60JgG9M9WRmqIrk5IXttE8ojssl0H4AhqAyDexEFRuw5Y-a7iDrqwIiTlaJShn2C8q1kbA76DgODmNdANtZ2WRsAsomqWDevPhbAybhPQI1cKAAAA]
+Header: User-Agent, Value: [MYOB/6.66 (AN/ON)]
+    </pre></code>
+  </body>
+</html>
+/usr/bin/curl -x '127.0.0.1:4443' -L zjjjd756aucwz3pa2fl4mb3po2wtf752aefpod4gvedwreeox52q.b32.i2p
+<!DOCTYPE html>
+<html>
+<head>
+  <title> What is my Base64? </title>
+</head>
+  <body>
+    <pre><code>
+Header: User-Agent, Value: [MYOB/6.66 (AN/ON)]
+Header: Accept-Encoding, Value: [gzip]
+Header: X-I2p-Destb32, Value: [ilx5ncydolriq4cbtxtktjagrhujtc52z5qh6fl5i4fvhnzz52yq.b32.i2p]
+Header: X-I2p-Desthash, Value: [Qu~WiwNy4ohwQZ3mqaQGieiZi7rPYH8VfUcLU7c57rE=]
+Header: X-I2p-Destb64, Value: [jJggw7sOou48MxN-j2pxID9uCZwHMKA4TANKUNufsL2QmMSYbvDE9E9IAYF9F7zzboGyLNvgAps2lzlBTbjSdBbqN90g9Z-FwuuHLE4vuRabGVxUX4gmnPfSW4qOXZwbSnXX1z5-vDWw1aQJBHhREHO~Ge7zjnYH2dyT2QBl5iKtQxDsJv1UvDYcgRlluh3AgZjK5piGJgmR4Z7poRbU6b7YTtCB8VIN3Meh0EVtjYMb3gBql~cK9SrZH02zOT6wxo3QdKcJHtMIPY9V86oxbZxiCNL6R6v7PBNqKMC7QsNbaRb6AJ3dR9j1jREGBGsrQSf0QxerlpY9rW~WKSzN-W0B3251heG7zz3y-0uL-LTpY2xuw~3fpwN1RkH8WcKTAk5GRhEDMpiLzIvpUzljR~-g9ePBDre-WzsgYVhl0sWD3M4sQwcHHMzQOdTXNj-Vg~L9AQC2U3IeogWkqgTBLULOIIyxinl2i2DBGWGzUAFDBQ35-Iwi3IgYUYAEIk7DAAAA]
+    </pre></code>
+  </body>
+</html>

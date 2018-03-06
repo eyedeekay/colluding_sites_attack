@@ -55,7 +55,7 @@ test-newhotness:
 	./test.sh n | tee test.newproxy.log
 
 diff:
-	diff test.oldproxy.log test.newproxy.log
+	diff --width=210 --side-by-side --color=always test.oldproxy.log test.newproxy.log | tee test.diff
 
 easysurf:
 	http_proxy=http://127.0.0.1:4443 surf http://i2p-projekt.i2p
