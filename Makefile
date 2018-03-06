@@ -50,7 +50,6 @@ run-website: network
 		--network fingerprint \
 		--network-alias fingerprint-website \
 		--hostname fingerprint-website \
-		-p 8080:8080 \
 		--restart always \
 		eyedeekay/colluding_sites_attack_website
 
