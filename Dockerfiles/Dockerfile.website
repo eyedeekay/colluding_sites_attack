@@ -7,7 +7,7 @@ COPY index.html /www/index.html
 RUN echo "text/css	css" | tee -a /www/mimetypes
 RUN echo "text/html	html" | tee -a /www/mimetypes
 RUN chown -R site:site /www
-RUN chmod o+rw /www/index.html /www/css/style.css
+RUN chmod o+rw /www/index.html /www/css/styles.css
 RUN chmod -R a+r /www
 USER site
 CMD darkhttpd /www --port 8081 --mimetypes /www/mimetypes
