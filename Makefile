@@ -84,3 +84,6 @@ visit:
 
 visit-classic:
 	http_proxy='http://127.0.0.1:4444' /usr/bin/surf http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p
+
+firefox:
+	iceweasel http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p

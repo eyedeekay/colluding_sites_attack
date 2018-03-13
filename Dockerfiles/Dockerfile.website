@@ -4,9 +4,10 @@ RUN apk add darkhttpd
 RUN adduser -h /www -D site site
 COPY css/styles.css /www/css/styles.css
 COPY index.html /www/index.html
+RUN echo "text/css	css" | tee -a /www/mimetypes
+RUN echo "text/html	html" | tee -a /www/mimetypes
 RUN chown -R site:site /www
-RUN chmod a+r /www
-RUN echo "text/css	css" | tee -a mimetypes
-RUN echo "text/html	html" | tee -a mimetypes
+RUN chmod o+rw /www/index.html /www/css/style.css
+RUN chmod -R a+r /www
 USER site
-CMD darkhttpd /www --port 8081 --mimetypes /mimetypes
+CMD darkhttpd /www --port 8081 --mimetypes /www/mimetypes
