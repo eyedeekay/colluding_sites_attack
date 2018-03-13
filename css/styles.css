@@ -55,3 +55,12 @@ pre {
     color: #020003;
     overflow: scroll;
 }
+
+iframe {
+    padding-bottom: 20px;
+    padding: 2px;
+    border: 2px dotted #deb887;
+    background: #fff8dc;
+    color: #020003;
+    overflow: scroll;
+}
