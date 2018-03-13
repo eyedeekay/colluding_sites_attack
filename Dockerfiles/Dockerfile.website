@@ -1,6 +1,12 @@
 FROM alpine:edge
 RUN apk update
 RUN apk add darkhttpd
+RUN adduser -h /www -D site site
 COPY css/styles.css /www/css/styles.css
 COPY index.html /www/index.html
-CMD darkhttpd /www --port 8081
+RUN chown -R site:site /www
+RUN chmod a+r /www
+RUN echo "text/css	css" | tee -a mimetypes
+RUN echo "text/html	html" | tee -a mimetypes
+USER site
+CMD darkhttpd /www --port 8081 --mimetypes /mimetypes
