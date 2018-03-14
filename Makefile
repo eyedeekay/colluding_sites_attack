@@ -42,7 +42,6 @@ run-service: network
 		--network fingerprint \
 		--network-alias fingerprint-service \
 		--hostname fingerprint-service \
-		-p 127.0.0.1:8080:8080 \
 		--restart always \
 		eyedeekay/colluding_sites_attack_service
 
@@ -52,7 +51,6 @@ run-website: network
 		--network-alias fingerprint-website \
 		--hostname fingerprint-website \
 		--restart always \
-		-p 127.0.0.1:8081:8081 \
 		eyedeekay/colluding_sites_attack_website
 
 list:
