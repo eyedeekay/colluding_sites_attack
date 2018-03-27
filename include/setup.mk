@@ -15,13 +15,13 @@ redo-network: clean-network network
 build: build-eepsite build-service build-website
 
 build-eepsite:
-	docker build -f Dockerfiles/Dockerfile.eepSite -t eyedeekay/colluding_sites_attack_eepsite .
+	docker build --force-rm -f Dockerfiles/Dockerfile.eepSite -t eyedeekay/colluding_sites_attack_eepsite .
 
 build-service:
-	docker build -f Dockerfiles/Dockerfile.service -t eyedeekay/colluding_sites_attack_service .
+	docker build --force-rm -f Dockerfiles/Dockerfile.service -t eyedeekay/colluding_sites_attack_service .
 
 build-website:
-	docker build -f Dockerfiles/Dockerfile.website -t eyedeekay/colluding_sites_attack_website .
+	docker build --force-rm -f Dockerfiles/Dockerfile.website -t eyedeekay/colluding_sites_attack_website .
 
 clean: clean-eepsite clean-service clean-website
 
