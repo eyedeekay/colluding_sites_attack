@@ -1,15 +1,20 @@
 package main
 
 import (
+    "flag"
 	"fmt"
 	"log"
 	"net/http"
 )
 
+import "github.com/eyedeekay/sam-forwarder"
+
 type blah struct{}
 
+var forwarder *samforwarder.SAMForwarder
+
 func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("the echo service is responding.")
+	log.Println("the echo service is responding to a request on:", )
 	/*
 	   fmt.Fprintf(w, "\n")
 
@@ -48,6 +53,22 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+    var err error
 	log.Println("starting go echo service")
-	log.Fatal(http.ListenAndServe("0.0.0.0:8080", &blah{}))
+    samhost := flag.String("samhost", "sam-host", "host of the SAM to use")
+    samport := flag.String("samport", "7656", "port of the SAM to use")
+    host := flag.String("host", "0.0.0.0", "host to forward")
+    port := flag.String("port", "9777", "port to forward")
+    flag.Parse()
+    if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
+        samforwarder.SetSAMHost(*samhost),
+        samforwarder.SetSAMPort(*samport),
+        samforwarder.SetHost(*host),
+        samforwarder.SetPort(*port),
+    ); err != nil {
+        log.Fatal(err.Error())
+    }else{
+        go forwarder.Serve()
+    }
+	log.Fatal(http.ListenAndServe(*host+":"+*port, &blah{}))
 }

@@ -1,7 +1,6 @@
 
 network:
-	docker network create fingerprint
-	@echo 'fingerprint' | tee network
+	docker network create fingerprint; true
 
 log-network:
 	docker network inspect fingerprint
