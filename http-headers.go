@@ -1,10 +1,12 @@
 package main
 
 import (
-    "flag"
+	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 )
 
 import "github.com/eyedeekay/sam-forwarder"
@@ -12,6 +14,16 @@ import "github.com/eyedeekay/sam-forwarder"
 type blah struct{}
 
 var forwarder *samforwarder.SAMForwarder
+
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randSeq(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
+}
 
 func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("the echo service is responding to a request on:", forwarder.Base32())
@@ -53,23 +65,26 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    var err error
+	var err error
+	rand.Seed(time.Now().UnixNano())
 	log.Println("starting go echo service")
-    samhost := flag.String("samhost", "sam-host", "host of the SAM to use")
-    samport := flag.String("samport", "7656", "port of the SAM to use")
-    host := flag.String("host", "0.0.0.0", "host to forward")
-    port := flag.String("port", "9777", "port to forward")
-    flag.Parse()
-    if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
-        samforwarder.SetSAMHost(*samhost),
-        samforwarder.SetSAMPort(*samport),
-        samforwarder.SetHost(*host),
-        samforwarder.SetPort(*port),
-    ); err != nil {
-        log.Fatal(err.Error())
-    }else{
-        go forwarder.Serve()
-    }
-    log.Println("Colluder configured on:", forwarder.Base32())
+	samhost := flag.String("samhost", "sam-host", "host of the SAM to use")
+	samport := flag.String("samport", "7656", "port of the SAM to use")
+	host := flag.String("host", "0.0.0.0", "host to forward")
+	port := flag.String("port", "9777", "port to forward")
+	flag.Parse()
+	if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
+		samforwarder.SetSaveFile(true),
+		samforwarder.SetName("collude-"+randSeq(4)),
+		samforwarder.SetSAMHost(*samhost),
+		samforwarder.SetSAMPort(*samport),
+		samforwarder.SetHost(*host),
+		samforwarder.SetPort(*port),
+	); err != nil {
+		log.Fatal(err.Error())
+	} else {
+		go forwarder.Serve()
+	}
+	log.Println("Colluder configured on:", forwarder.Base32())
 	log.Fatal(http.ListenAndServe(*host+":"+*port, &blah{}))
 }

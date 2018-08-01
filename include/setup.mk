@@ -1,15 +1,12 @@
 
 network:
-	docker network create fingerprint; true
+	docker network create si; true
 
 log-network:
-	docker network inspect fingerprint
+	docker network inspect si
 
 clean-network:
-	rm -f network
-	docker network rm fingerprint; true
-
-redo-network: clean-network network
+	docker network rm si; true
 
 build: build-eepsite build-service build-website
 
