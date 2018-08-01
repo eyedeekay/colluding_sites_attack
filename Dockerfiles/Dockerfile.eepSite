@@ -8,8 +8,8 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv 66F6C87B98EBCFE2 |
     apt-key adv --keyserver keyserver.ubuntu.com --recv 66F6C87B98EBCFE2 || \
     apt-key adv --keyserver keyserver.pgp.com --recv 66F6C87B98EBCFE2
 RUN apt-get update && apt-get install -y i2pd
-COPY tunnels.conf /etc/i2pd/tunnels.conf
-COPY i2pd.conf /etc/i2pd/i2pd.conf
+COPY include/tunnels.conf /etc/i2pd/tunnels.conf
+COPY include/i2pd.conf /etc/i2pd/i2pd.conf
 CMD chown -R i2pd:i2pd /var/lib/i2pd; \
     ln -sf /usr/share/i2pd/certificates /var/lib/i2pd/certificates; \
     ln -sf /etc/i2pd/subscriptions.txt /var/lib/i2pd/subscriptions.txt; \

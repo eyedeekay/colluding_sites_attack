@@ -25,7 +25,7 @@ build-website:
 clean: clean-eepsite clean-service clean-website
 
 clean-eepsite:
-	docker rm -f fingerprint-eepsite; true
+	docker rm -f sam-host; true
 
 clean-service:
 	docker rm -f fingerprint-service; true
@@ -45,7 +45,7 @@ clobber-website:
 	docker rmi -f eyedeekay/colluding_sites_attack_website; true
 
 log-eepsite:
-	docker logs fingerprint-eepsite
+	docker logs sam-host
 
 log-service:
 	docker logs fingerprint-service

@@ -14,7 +14,7 @@ type blah struct{}
 var forwarder *samforwarder.SAMForwarder
 
 func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("the echo service is responding to a request on:", )
+	log.Println("the echo service is responding to a request on:", forwarder.Base32())
 	/*
 	   fmt.Fprintf(w, "\n")
 
@@ -70,5 +70,6 @@ func main() {
     }else{
         go forwarder.Serve()
     }
+    log.Println("Colluder configured on:", forwarder.Base32())
 	log.Fatal(http.ListenAndServe(*host+":"+*port, &blah{}))
 }

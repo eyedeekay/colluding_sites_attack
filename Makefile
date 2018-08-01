@@ -26,10 +26,10 @@ include include/setup.mk
 run: network run-eepsite run-service run-website
 
 run-eepsite: network
-	docker run -d --name fingerprint-eepsite \
+	docker run -d --name sam-host \
 		--network fingerprint \
-		--network-alias fingerprint-eepsite \
-		--hostname fingerprint-eepsite \
+		--network-alias sam-host \
+		--hostname sam-host \
 		--expose 4567 \
 		--link fingerprint-service \
 		--link fingerprint-website \
@@ -41,6 +41,14 @@ run-eepsite: network
 
 run-service: network
 	docker run -d --name fingerprint-service \
+		--network fingerprint \
+		--network-alias fingerprint-service \
+		--hostname fingerprint-service \
+		--restart always \
+		eyedeekay/colluding_sites_attack_service
+
+run-service-new: network
+	docker run -i -t \
 		--network fingerprint \
 		--network-alias fingerprint-service \
 		--hostname fingerprint-service \
@@ -84,7 +92,7 @@ visit:
 	http_proxy=http://127.0.0.1:4443 /usr/bin/surf http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p
 
 visit-classic:
-	http_proxy='http://127.0.0.1:4444' /usr/bin/surf http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p
+	http_proxy=http://127.0.0.1:4444 /usr/bin/surf http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p
 
 firefox:
 	iceweasel http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p \
