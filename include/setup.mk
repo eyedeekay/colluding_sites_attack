@@ -22,10 +22,7 @@ build-service:
 build-website:
 	docker build --force-rm -f Dockerfiles/Dockerfile.website -t eyedeekay/colluding_sites_attack_website .
 
-clean: clean-eepsite clean-service clean-website
-
-clean-eepsite:
-	docker rm -f sam-host; true
+clean: clean-service clean-website
 
 clean-service:
 	docker rm -f fingerprint-service; true
@@ -57,6 +54,6 @@ update: clean build run
 
 update-service: clean-service build-service run-service
 
-update-eepsite: clean-eepsite build-eepsite run-eepsite
+update-eepsite: build-eepsite run-eepsite
 
 update-website: clean-website build-website run-website
