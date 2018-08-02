@@ -119,10 +119,6 @@ unique i2p destination.</p>
 
     func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         log.Println("the echo service is responding to a request on:", forwarder.Base32())
-        /*
-           fmt.Fprintf(w, "\n")
-
-        */
         fmt.Fprintf(w, "<!DOCTYPE html>\n")
         fmt.Fprintf(w, "<html>\n")
         fmt.Fprintf(w, "<head>\n")
@@ -147,13 +143,41 @@ unique i2p destination.</p>
         fmt.Fprintf(w, "    }\n")
         fmt.Fprintf(w, "  </script>\n")
         fmt.Fprintf(w, "  <script type=\"application/javascript\" src=\"https://api.ipify.org?format=jsonp&callback=getIP\"></script>\n")
+        fmt.Fprintf(w, "  <div id=\"container\"></div>")
+        fmt.Fprintf(w, "  <h3>Fingerprintjs2</h3>")
+        fmt.Fprintf(w, "  <p>Your browser fingerprint: <strong id=\"fp\"></strong></p>")
+        fmt.Fprintf(w, "  <p><code id=\"time\"/></p>")
+        fmt.Fprintf(w, "  <p><span id=\"details\"/></p>")
+        fmt.Fprintf(w, "  <button type=\"button\" id=\"btn\">Get my fingerprint</button>")
+
+        fmt.Fprintf(w, "  <script src=\"include/fingerprint2.js\"></script>")
+        fmt.Fprintf(w, "  <script>")
+        fmt.Fprintf(w, "    document.querySelector(\"#btn\").addEventListener(\"click\", function () {")
+        fmt.Fprintf(w, "      var d1 = new Date();")
+        fmt.Fprintf(w, "      var fp = new Fingerprint2();")
+        fmt.Fprintf(w, "      fp.get(function(result, components) {")
+        fmt.Fprintf(w, "        var d2 = new Date();")
+        fmt.Fprintf(w, "        var timeString = \"Time took to calculate the fingerprint: \" + (d2 - d1) + \"ms\";")
+        fmt.Fprintf(w, "        var details = \"<strong>Detailed information: </strong><br />\";")
+        fmt.Fprintf(w, "        if(typeof window.console !== \"undefined\") {")
+        fmt.Fprintf(w, "          console.log(timeString);")
+        fmt.Fprintf(w, "          console.log(result);")
+        fmt.Fprintf(w, "          for (var index in components) {")
+        fmt.Fprintf(w, "            var obj = components[index];")
+        fmt.Fprintf(w, "            var value = obj.value;")
+        fmt.Fprintf(w, "            var line = obj.key + \" = \" + value.toString().substr(0, 100);")
+        fmt.Fprintf(w, "            console.log(line);")
+        fmt.Fprintf(w, "            details += line + \"<br />\";")
+        fmt.Fprintf(w, "          }")
+        fmt.Fprintf(w, "        }")
+        fmt.Fprintf(w, "        document.querySelector(\"#details\").innerHTML = details")
+        fmt.Fprintf(w, "        document.querySelector(\"#fp\").textContent = result")
+        fmt.Fprintf(w, "        document.querySelector(\"#time\").textContent = timeString")
+        fmt.Fprintf(w, "      });")
+        fmt.Fprintf(w, "    });")
+        fmt.Fprintf(w, "  </script>")
         fmt.Fprintf(w, "  </body>\n")
         fmt.Fprintf(w, "</html>\n")
-        /*
-
-           fmt.Fprintf(w, "\n")
-
-        */
     }
 
     func main() {
@@ -180,6 +204,7 @@ unique i2p destination.</p>
         log.Println("Colluder configured on:", forwarder.Base32())
         log.Fatal(http.ListenAndServe(*host+":"+*port, &blah{}))
     }
+
 
 </code></pre>
 
