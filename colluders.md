@@ -1,9 +1,6 @@
 Well-Integrated Colluding eepSites for testing Colluding eepSites
 =================================================================
 
-THESE do not exist anymore. If at some point I resurrect this, they'll have
-different URL's. I'll probably put them back here.
-
 Colluding eepSite URL's
 
   * [COLLUDETWO](http://nehza4jkhlol7hkzec4lhr2zqmtbinwlyz7ehnlp3ke5or5avyjq.b32.i2p)

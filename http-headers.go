@@ -31,7 +31,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<html>\n")
 	fmt.Fprintf(w, "<head>\n")
 	fmt.Fprintf(w, "  <title> What is my Base64? </title>\n")
-	fmt.Fprintf(w, "  <link rel=\"stylesheet\" href=\"http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p/css/styles.css\">\n")
+	fmt.Fprintf(w, "  <link rel=\"stylesheet\" href=\"css/styles.css\">\n")
 	fmt.Fprintf(w, "</head>\n")
 	fmt.Fprintf(w, "  <body>\n")
 	fmt.Fprintf(w, "  <p>\n")

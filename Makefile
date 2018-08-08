@@ -35,6 +35,7 @@ run-service: network
 		--restart always \
 		-v /home/reflect/ \
 		eyedeekay/colluding_sites_attack_service
+	docker logs "collude-$(attacker)" | tee -a colluders.md
 
 run-website: network
 	docker run -d --name fingerprint-website \
