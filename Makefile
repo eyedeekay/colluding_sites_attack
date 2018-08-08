@@ -5,9 +5,9 @@ usage:
 	@echo 'usage:'
 	@echo '======'
 	@echo
-	@echo ' install: make install'
-	@echo ' reinstall without purging some settings: make reinstall'
-	@echo ' re-generate all settings: make clobber install'
+	@echo ' install: make update'
+	@echo ' reinstall without purging some settings: make update'
+	@echo ' re-generate all settings: make docker-clobber update'
 	@echo
 	@echo 'Configured Directories'
 	@echo '----------------------'
@@ -23,21 +23,7 @@ usage:
 include include/config.mk
 include include/setup.mk
 
-run: network run-eepsite run-service run-website
-
-run-eepsite: network
-	docker run -d --name sam-host \
-		--network si \
-		--network-alias sam-host \
-		--hostname sam-host \
-		--expose 4567 \
-		--link fingerprint-service \
-		--link fingerprint-website \
-		-p :4567 \
-		-p 127.0.0.1:7072:7072 \
-		--volume $(i2pd_dat):/var/lib/i2pd:rw \
-		--restart always \
-		eyedeekay/colluding_sites_attack_eepsite
+run: network run-service run-website
 
 run-service: network
 	docker run -i -t \
@@ -73,5 +59,3 @@ deps:
 compile:
 	go build http-headers.go
 
-del:
-	rm http-headers

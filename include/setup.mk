@@ -8,10 +8,7 @@ log-network:
 clean-network:
 	docker network rm si; true
 
-build: build-eepsite build-service build-website
-
-build-eepsite:
-	docker build --force-rm -f Dockerfiles/Dockerfile.eepSite -t eyedeekay/colluding_sites_attack_eepsite .
+docker-build: build-service build-website
 
 build-service:
 	docker build --force-rm -f Dockerfiles/Dockerfile.service -t eyedeekay/colluding_sites_attack_service .
@@ -19,7 +16,7 @@ build-service:
 build-website:
 	docker build --force-rm -f Dockerfiles/Dockerfile.website -t eyedeekay/colluding_sites_attack_website .
 
-clean: clean-service clean-website
+docker-clean: clean-service clean-website
 
 clean-service:
 	docker rm -f fingerprint-service; true
@@ -27,19 +24,13 @@ clean-service:
 clean-website:
 	docker rm -f fingerprint-website; true
 
-clobber: clobber-eepsite clobber-service clobber-website
-
-clobber-eepsite:
-	docker rmi -f eyedeekay/colluding_sites_attack_eepsite; true
+docker-clobber: clobber-service clobber-website
 
 clobber-service:
 	docker rmi -f eyedeekay/colluding_sites_attack_service; true
 
 clobber-website:
 	docker rmi -f eyedeekay/colluding_sites_attack_website; true
-
-log-eepsite:
-	docker logs sam-host
 
 log-service:
 	docker logs fingerprint-service
@@ -50,7 +41,5 @@ log-website:
 update: clean build run
 
 update-service: clean-service build-service run-service
-
-update-eepsite: build-eepsite run-eepsite
 
 update-website: clean-website build-website run-website
