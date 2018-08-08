@@ -5,6 +5,8 @@ usage:
 	@echo 'usage:'
 	@echo '======'
 	@echo
+	@echo "$(attacker)"
+	@echo
 	@echo ' install: make update'
 	@echo ' reinstall without purging some settings: make update'
 	@echo ' re-generate all settings: make docker-clobber update'
@@ -27,6 +29,8 @@ run: network run-service run-website
 
 run-service: network
 	docker run -i -t \
+		-d \
+		--name "collude-$(attacker)" \
 		--network si \
 		--restart always \
 		-v /home/reflect/ \
