@@ -51,6 +51,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "    }\n")
 	fmt.Fprintf(w, "  </script>\n")
 	fmt.Fprintf(w, "  <script type=\"application/javascript\" src=\"https://api.ipify.org?format=jsonp&callback=getIP\"></script>\n")
+    /*
     fmt.Fprintf(w, "  <div id=\"container\"></div>")
     fmt.Fprintf(w, "  <h3>Fingerprintjs2</h3>")
     fmt.Fprintf(w, "  <p>Your browser fingerprint: <strong id=\"fp\"></strong></p>")
@@ -83,7 +84,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "        document.querySelector(\"#time\").textContent = timeString")
     fmt.Fprintf(w, "      });")
     fmt.Fprintf(w, "    });")
-    fmt.Fprintf(w, "  </script>")
+    fmt.Fprintf(w, "  </script>")*/
 	fmt.Fprintf(w, "  </body>\n")
 	fmt.Fprintf(w, "</html>\n")
 }
