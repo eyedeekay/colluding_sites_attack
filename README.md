@@ -9,3 +9,5 @@ malicious purposes, and *any practical degradation of privacy of people seeking*
 not for degrading privacy.
 
 It's not doing addressbook fingerprinting yet. Both may be added in the future as I get wierder with the browser.
+
+jj5zbijlmpswrnns6yby5kqn4pjxpydbh4knt5stkeh5zpetvgia.b32.i2p

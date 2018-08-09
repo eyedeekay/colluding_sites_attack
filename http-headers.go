@@ -31,7 +31,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<html>\n")
 	fmt.Fprintf(w, "<head>\n")
 	fmt.Fprintf(w, "  <title> What is my Base64? </title>\n")
-	//fmt.Fprintf(w, "  <link rel=\"stylesheet\" href=\"css/styles.css\">\n")
+	fmt.Fprintf(w, "  <link rel=\"stylesheet\" href=\"http://jj5zbijlmpswrnns6yby5kqn4pjxpydbh4knt5stkeh5zpetvgia.b32.i2p/css/styles.css\">\n")
 	fmt.Fprintf(w, "</head>\n")
 	fmt.Fprintf(w, "  <body>\n")
 	fmt.Fprintf(w, "  <p>\n")
@@ -51,7 +51,6 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "    }\n")
 	fmt.Fprintf(w, "  </script>\n")
 	fmt.Fprintf(w, "  <script type=\"application/javascript\" src=\"https://api.ipify.org?format=jsonp&callback=getIP\"></script>\n")
-    /*
     fmt.Fprintf(w, "  <div id=\"container\"></div>")
     fmt.Fprintf(w, "  <h3>Fingerprintjs2</h3>")
     fmt.Fprintf(w, "  <p>Your browser fingerprint: <strong id=\"fp\"></strong></p>")
@@ -84,7 +83,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "        document.querySelector(\"#time\").textContent = timeString")
     fmt.Fprintf(w, "      });")
     fmt.Fprintf(w, "    });")
-    fmt.Fprintf(w, "  </script>")*/
+    fmt.Fprintf(w, "  </script>")
 	fmt.Fprintf(w, "  </body>\n")
 	fmt.Fprintf(w, "</html>\n")
 }
