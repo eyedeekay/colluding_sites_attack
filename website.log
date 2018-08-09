@@ -1,7 +1,7 @@
-2018/08/09 00:25:42 SAM Bridge connection established.
-2018/08/09 00:25:42 Destination keys generated, tunnel name: fingerprintwebsite
-2018/08/09 00:25:42 Serving ./www on HTTP port: 8100
-	 and on zbprsnu26qqtm3cccx6imtm4rc2v3o474eezdd2mfj7x4bpcnqqq.b32.i2p
-2018/08/09 00:26:02 SAM stream session established.
-2018/08/09 00:26:02 Starting Listener.
-2018/08/09 00:26:02 SAM Listener created, zbprsnu26qqtm3cccx6imtm4rc2v3o474eezdd2mfj7x4bpcnqqq.b32.i2p
+2018/08/09 00:29:32 starting go echo service
+2018/08/09 00:29:32 SAM Bridge connection established.
+2018/08/09 00:29:32 Destination keys generated, tunnel name: collude-PyQV
+2018/08/09 00:29:32 Colluder configured on: qttuwflonmkkvvi6agtlprdh3jkby746ab3ln6cs73ozg2mm743q.b32.i2p
+2018/08/09 00:29:52 SAM stream session established.
+2018/08/09 00:29:52 Starting Listener.
+2018/08/09 00:29:52 SAM Listener created, qttuwflonmkkvvi6agtlprdh3jkby746ab3ln6cs73ozg2mm743q.b32.i2p
