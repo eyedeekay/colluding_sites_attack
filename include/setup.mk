@@ -42,4 +42,4 @@ update: docker-clean docker-build run
 
 update-service: clean-service build-service run-service
 
-update-website: clean-website build-website run-website
+update-website: build-website run-website
