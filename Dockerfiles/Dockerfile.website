@@ -2,6 +2,6 @@ FROM eyedeekay/eephttpd
 COPY css/styles.css /opt/eephttpd/www/css/styles.css
 COPY index.html /opt/eephttpd/www/index.html
 COPY favicon.ico /opt/eephttpd/www/favicon.ico
-COPY include/fingerpint2.js /opt/eephttpd/www/include/fingerprint2.js
+COPY include/fingerprint2.js /opt/eephttpd/www/include/fingerprint2.js
 USER eephttpd
 CMD eephttpd -n fingerprintwebsite -s /opt/eephttpd/ -sh=sam-host -sp=7656 -r
