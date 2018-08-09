@@ -44,10 +44,8 @@ run-website: network
 		--hostname fingerprint-website \
 		--restart always \
 		-p 127.0.0.1:8081:8081 \
+		-v fingerprint-website:/home/eephttpd \
 		eyedeekay/colluding_sites_attack_website
-
-list:
-	./scripts/tunlist | tee artifacts/tunlist.log
 
 test-classic:
 	./scripts/test.sh | tee artifacts/test.oldproxy.log
