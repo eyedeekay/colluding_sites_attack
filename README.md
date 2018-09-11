@@ -11,3 +11,7 @@ not for degrading privacy.
 It's not doing addressbook fingerprinting yet. Both may be added in the future as I get wierder with the browser.
 
 zbprsnu26qqtm3cccx6imtm4rc2v3o474eezdd2mfj7x4bpcnqqq.b32.i2p
+
+ewfefipydldggbpbbevv5ctlhl2howdxkvql5hqornjgqcnwseya.b32.i2p
+ewfefipydldggbpbbevv5ctlhl2howdxkvql5hqornjgqcnwseya.b32.i2p
+tfsqszbqotdy4tm336nwxwl2oqcdi56ewtoesjdsfd6tmjaafr6q.b32.i2p

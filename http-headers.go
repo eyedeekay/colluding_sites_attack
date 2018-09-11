@@ -104,6 +104,7 @@ func main() {
 		samforwarder.SetSAMPort(*samport),
 		samforwarder.SetHost(*host),
 		samforwarder.SetPort(*port),
+        samforwarder.SetType("http"),
 	); err != nil {
 		log.Fatal(err.Error())
 	} else {
