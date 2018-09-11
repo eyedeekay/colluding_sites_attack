@@ -1,3 +1,5 @@
 i2pd_dat
 http-headers
 colluders.md
+*.log
+.go
