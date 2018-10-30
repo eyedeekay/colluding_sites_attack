@@ -31,7 +31,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<html>%s`, "\n")
 	fmt.Fprintf(w, `<head>%s`, "\n")
 	fmt.Fprintf(w, `  <title> What is my Base64? </title>%s`, "\n")
-	fmt.Fprintf(w, `  <link rel="stylesheet" href="http://zi76nfl2pjjco6pqktxr2nl7uvuvwascmm46g23qobp7mcubxdfa.b32.i2p/css/styles.css">%s`, "\n")
+	fmt.Fprintf(w, `  <link rel="stylesheet" href="http://3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p/css/styles.css">%s`, "\n")
 	fmt.Fprintf(w, `</head>%s`, "\n")
 	fmt.Fprintf(w, `  <body>%s`, "\n")
 	fmt.Fprintf(w, `  <p>%s`, "\n")
@@ -58,7 +58,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, `  <p><span id="details"/></p>%s`, "\n")
     fmt.Fprintf(w, `  <button type="button" id="btn">Get my fingerprint</button>%s`, "\n")
 
-    fmt.Fprintf(w, `  <script src="http://zbprsnu26qqtm3cccx6imtm4rc2v3o474eezdd2mfj7x4bpcnqqq.b32.i2p/include/fingerprint2.js"></script>%s`, "\n")
+    fmt.Fprintf(w, `  <script src="http://3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p/include/fingerprint2.js"></script>%s`, "\n")
     fmt.Fprintf(w, `  <script>%s`, "\n")
     fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
     fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
