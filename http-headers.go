@@ -31,7 +31,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<html>%s`, "\n")
 	fmt.Fprintf(w, `<head>%s`, "\n")
 	fmt.Fprintf(w, `  <title> What is my Base64? </title>%s`, "\n")
-	fmt.Fprintf(w, `  <link rel="stylesheet" href="http://zbprsnu26qqtm3cccx6imtm4rc2v3o474eezdd2mfj7x4bpcnqqq.b32.i2p/css/styles.css">%s`, "\n")
+	fmt.Fprintf(w, `  <link rel="stylesheet" href="http://zi76nfl2pjjco6pqktxr2nl7uvuvwascmm46g23qobp7mcubxdfa.b32.i2p/css/styles.css">%s`, "\n")
 	fmt.Fprintf(w, `</head>%s`, "\n")
 	fmt.Fprintf(w, `  <body>%s`, "\n")
 	fmt.Fprintf(w, `  <p>%s`, "\n")
@@ -88,14 +88,19 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `</html>%s`, "\n")
 }
 
+var (
+    samhost = flag.String("samhost", "sam-host", "host of the SAM to use")
+	samport = flag.String("samport", "7656", "port of the SAM to use")
+	host = flag.String("host", "0.0.0.0", "host to forward")
+	port = flag.String("port", "9777", "port to forward")
+    toralso = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
+)
+
 func main() {
 	var err error
 	rand.Seed(time.Now().UnixNano())
 	log.Println("starting go echo service")
-	samhost := flag.String("samhost", "sam-host", "host of the SAM to use")
-	samport := flag.String("samport", "7656", "port of the SAM to use")
-	host := flag.String("host", "0.0.0.0", "host to forward")
-	port := flag.String("port", "9777", "port to forward")
+
 	flag.Parse()
 	if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
 		samforwarder.SetSaveFile(true),
