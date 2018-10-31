@@ -95,6 +95,7 @@ var (
 	samport    = flag.String("samport", "7656", "port of the SAM to use")
 	host       = flag.String("host", "0.0.0.0", "host to forward")
 	port       = flag.String("port", "9777", "port to forward")
+    tag        = flag.String("tag", randSeq(4), "append to collude-* name")
 	sourcesite = flag.String("resource", "3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p", "b32 address of site with resources")
 	toralso    = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
 )
@@ -106,7 +107,7 @@ func main() {
 	flag.Parse()
 	if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
 		samforwarder.SetSaveFile(true),
-		samforwarder.SetName("collude-"+randSeq(4)),
+		samforwarder.SetName("collude-"+*tag),
 		samforwarder.SetSAMHost(*samhost),
 		samforwarder.SetSAMPort(*samport),
 		samforwarder.SetHost(*host),

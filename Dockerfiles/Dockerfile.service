@@ -1,4 +1,5 @@
 FROM alpine:edge
+ENV TAG="tag"
 RUN apk update
 RUN apk add go git make musl-dev musl musl-utils #python3
 RUN adduser -h /home/reflect/ -D reflect reflect
@@ -8,4 +9,4 @@ COPY . /home/reflect
 USER reflect
 RUN go get -u github.com/eyedeekay/sam-forwarder/
 RUN go build -o http-headers http-headers.go
-CMD ./http-headers
+CMD ./http-headers -tag $TAG

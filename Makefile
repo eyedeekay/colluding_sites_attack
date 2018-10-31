@@ -37,6 +37,7 @@ run-volume: network
 run-service: network run-volume
 	docker run -i -t \
 		-d \
+		-e TAG=$(attacker) \
 		--name "collude-$(attacker)" \
 		--network si \
 		--restart always \
