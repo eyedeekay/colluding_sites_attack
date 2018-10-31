@@ -31,7 +31,8 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s;", *sourcesite)
 	w.Header().Add("Content-Security-Policy", csp_header)
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, `<!DOCTYPE html>%s`, "\n")
+	w.Write([]byte(`<!DOCTYPE html>`))
+	fmt.Fprintf(w, "\n")
 	fmt.Fprintf(w, `<html>%s`, "\n")
 	fmt.Fprintf(w, `<head>%s`, "\n")
 	fmt.Fprintf(w, `  <title> What is my Base64? </title>%s`, "\n")
@@ -42,6 +43,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `    Attempting to force resource retrieval over plain https%s`, "\n")
 	fmt.Fprintf(w, `  </p>%s`, "\n")
 	fmt.Fprintf(w, `    <pre><code>%s`, "\n")
+	fmt.Fprintf(w, "visited:%s\n", html.EscapeString(r.URL.Path))
 	for key, value := range r.Header {
 		log.Println(key, value)
 		fmt.Fprintf(w, "Header: %s, Value: %s \n", key, value)
@@ -89,8 +91,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `    });%s`, "\n")
 	fmt.Fprintf(w, `  </script>%s`, "\n")
 	fmt.Fprintf(w, `  </body>%s`, "\n")
-	fmt.Fprintf(w, `</html>%s %q`, "\n")//, html.EscapeString(r.URL.Path))
-    w.Write([]byte(html.EscapeString(r.URL.Path)))
+	fmt.Fprintf(w, `</html>%s`, "\n")
 }
 
 var (
