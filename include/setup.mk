@@ -11,7 +11,7 @@ clean-network:
 docker-build: build-service build-website
 
 build-service:
-	docker build --force-rm -f Dockerfiles/Dockerfile.service -t eyedeekay/colluding_sites_attack_service .
+	docker build --no-cache -f Dockerfiles/Dockerfile.service -t eyedeekay/colluding_sites_attack_service .
 
 build-website:
 	docker build --force-rm -f Dockerfiles/Dockerfile.website -t eyedeekay/colluding_sites_attack_website .
