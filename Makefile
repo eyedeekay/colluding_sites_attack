@@ -33,7 +33,7 @@ run-service: network
 		--name "collude-$(attacker)" \
 		--network si \
 		--restart always \
-		-v /home/reflect/ \
+		-v reflect-volume:/home/reflect/ \
 		eyedeekay/colluding_sites_attack_service
 	docker logs "collude-$(attacker)" | tee -a colluders.md
 
