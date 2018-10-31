@@ -8,5 +8,4 @@ WORKDIR /home/reflect
 COPY . /home/reflect
 USER reflect
 RUN go get -u github.com/eyedeekay/sam-forwarder/
-RUN go build -o http-headers http-headers.go
-CMD ./http-headers -tag $TAG
+CMD go build -o http-headers http-headers.go && ./http-headers -tag $TAG
