@@ -30,7 +30,6 @@ run: network run-service run-website
 run-volume: network
 	docker run -i -t -d \
 		--name "collude-volume" \
-		--restart always \
 		-v reflect-volume:/home/reflect/ \
 		eyedeekay/colluding_sites_attack_service; true
 
