@@ -27,13 +27,20 @@ include include/setup.mk
 
 run: network run-service run-website
 
-run-service: network
+run-volume: network
+	docker run -i -t -d \
+		--name "collude-volume" \
+		--restart always \
+		-v reflect-volume:/home/reflect/ \
+		eyedeekay/colluding_sites_attack_service; true
+
+run-service: network run-volume
 	docker run -i -t \
 		-d \
 		--name "collude-$(attacker)" \
 		--network si \
 		--restart always \
-		-v reflect-volume:/home/reflect/ \
+		--volumes-from collude-volume \
 		eyedeekay/colluding_sites_attack_service
 	docker logs "collude-$(attacker)" | tee -a colluders.md
 

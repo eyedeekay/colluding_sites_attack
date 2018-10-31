@@ -103,7 +103,6 @@ func main() {
 	var err error
 	rand.Seed(time.Now().UnixNano())
 	log.Println("starting go echo service")
-
 	flag.Parse()
 	if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
 		samforwarder.SetSaveFile(true),
