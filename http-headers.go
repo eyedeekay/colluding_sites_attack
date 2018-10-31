@@ -27,7 +27,7 @@ func randSeq(n int) string {
 
 func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("the echo service is responding to a request on:", forwarder.Base32())
-    csp_header := fmt.Sprintf("default-src 'self'; script-src 'self' api.ipify.org %s;", *sourcesite)
+    csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s;", *sourcesite)
     w.Header().Add("Content-Security-Policy", csp_header)
 	fmt.Fprintf(w, `<!DOCTYPE html>%s`, "\n")
 	fmt.Fprintf(w, `<html>%s`, "\n")
