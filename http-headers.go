@@ -27,8 +27,8 @@ func randSeq(n int) string {
 
 func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("the echo service is responding to a request on:", forwarder.Base32())
-    csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s;", *sourcesite)
-    w.Header().Add("Content-Security-Policy", csp_header)
+	csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s;", *sourcesite)
+	w.Header().Add("Content-Security-Policy", csp_header)
 	fmt.Fprintf(w, `<!DOCTYPE html>%s`, "\n")
 	fmt.Fprintf(w, `<html>%s`, "\n")
 	fmt.Fprintf(w, `<head>%s`, "\n")
@@ -95,7 +95,7 @@ var (
 	samport    = flag.String("samport", "7656", "port of the SAM to use")
 	host       = flag.String("host", "0.0.0.0", "host to forward")
 	port       = flag.String("port", "9777", "port to forward")
-    tag        = flag.String("tag", randSeq(4), "append to collude-* name")
+	tag        = flag.String("tag", randSeq(4), "append to collude-* name")
 	sourcesite = flag.String("resource", "3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p", "b32 address of site with resources")
 	toralso    = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
 )
