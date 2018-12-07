@@ -56,7 +56,7 @@ run-website: network
 		--hostname fingerprint-website \
 		--restart always \
 		-p 127.0.0.1:8081:8081 \
-		--volumes-from site-volume \
+		-v static-volume:/opt/eephttpd/ \
 		-v fingerprint-website:/home/eephttpd \
 		eyedeekay/colluding_sites_attack_website
 
