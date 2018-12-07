@@ -14,6 +14,6 @@ It's not doing addressbook fingerprinting yet.
 
 I think I might know how to do something pretty bad.
 
-in-i2p homepage: http://3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p
+in-i2p homepage: http://gzr6cio3f3sepzofe24zhhrd733swb2ekxhe2ktjaw62z7rhf7va.b32.i2p
 
   * 2018/12/07 07:48:55 Colluder configured on: ly5unhjuqbriik3h5kfncmzgqkeimavlszu5h3sap3rtid2qff5q.b32.i2p

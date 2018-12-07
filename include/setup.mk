@@ -38,7 +38,7 @@ log-service:
 log-website:
 	docker logs fingerprint-website
 
-update: docker-clean docker-build run
+update: docker-clean docker-build index run
 
 update-service: clean-service build-service run-service
 
