@@ -35,6 +35,14 @@ func FingerprintJS(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, fingerprintjs)
 }
 
+func GetIP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, `    function getIP(json) {%s`, "\n")
+	fmt.Fprintf(w, `      document.write("<pre><code>");%s`, "\n")
+	fmt.Fprintf(w, `      document.write("My public IP address is:", json.ip);%s`, "\n")
+	fmt.Fprintf(w, `      document.write("</pre></code>");%s`, "\n")
+	fmt.Fprintf(w, `    }%s`, "\n")
+}
+
 func LocalJS(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
 	fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
@@ -64,8 +72,7 @@ func LocalJS(w http.ResponseWriter, r *http.Request) {
 // PageContent builds the page
 func PageContent(w http.ResponseWriter, r *http.Request) {
 	log.Println("the echo service is responding to a request on:", forwarder.Base32())
-	csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s; ", *sourcesite)
-	csp_header += fmt.Sprintf("script-src 'self' api.ipify.org %s;", *sourcesite)
+	csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s %s; ", forwarder.Base32(), *sourcesite)
 	w.Header().Add("Content-Security-Policy", csp_header)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`<!DOCTYPE html>`))
@@ -90,14 +97,8 @@ func PageContent(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Header: %s, Value: %s \n", key, value)
 	}
 	fmt.Fprintf(w, `    </pre></code>%s`, "\n")
-	fmt.Fprintf(w, `  <script type="application/javascript">%s`, "\n")
-	fmt.Fprintf(w, `    function getIP(json) {%s`, "\n")
-	fmt.Fprintf(w, `      document.write("<pre><code>");%s`, "\n")
-	fmt.Fprintf(w, `      document.write("My public IP address is:", json.ip);%s`, "\n")
-	fmt.Fprintf(w, `      document.write("</pre></code>");%s`, "\n")
-	fmt.Fprintf(w, `    }%s`, "\n")
-	fmt.Fprintf(w, `  </script>%s`, "\n")
-	fmt.Fprintf(w, `  <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>%s`, "\n")
+    fmt.Fprintf(w, `  <script type="application/javascript" src="/getip.js"></script>%s`, "\n")
+    fmt.Fprintf(w, `  <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>%s`, "\n")
 	fmt.Fprintf(w, `  <div id="container"></div>%s`, "\n")
 	fmt.Fprintf(w, `  <h3>Fingerprintjs2</h3>%s`, "\n")
 	fmt.Fprintf(w, `  <p>Your browser fingerprint: <strong id="fp"></strong></p>%s`, "\n")
@@ -109,9 +110,7 @@ func PageContent(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, `  <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
 	}
-	fmt.Fprintf(w, `  <script>%s`, "\n")
 	fmt.Fprintf(w, `  <script type="application/javascript" src="/local.js"></script>%s`, "\n")
-	fmt.Fprintf(w, `  </script>%s`, "\n")
 	fmt.Fprintf(w, `  </body>%s`, "\n")
 	fmt.Fprintf(w, `</html>%s`, "\n")
 }
@@ -162,6 +161,7 @@ func main() {
 	http.HandleFunc("/styles.css", CSSStyle)
 	http.HandleFunc("/fingerprint.js", FingerprintJS)
 	http.HandleFunc("/local.js", LocalJS)
+    http.HandleFunc("/getip.js", GetIP)
 	log.Println("Colluder configured on:", forwarder.Base32())
 	log.Fatal(http.ListenAndServe(*host+":"+*port, nil))
 }

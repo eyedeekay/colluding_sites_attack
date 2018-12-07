@@ -1,16 +1,16 @@
---2018-12-07 02:35:18--  https://github.com/Valve/fingerprintjs2/raw/master/fingerprint2.js
-Resolving github.com (github.com)... 140.82.118.4, 140.82.118.3
-Connecting to github.com (github.com)|140.82.118.4|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://raw.githubusercontent.com/Valve/fingerprintjs2/master/fingerprint2.js [following]
---2018-12-07 02:35:21--  https://raw.githubusercontent.com/Valve/fingerprintjs2/master/fingerprint2.js
-Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.112.133
-Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.112.133|:443... connected.
-HTTP request sent, awaiting response... 416 Range Not Satisfiable
-
-    The file is already fully retrieved; nothing to do.
-
-UPTION) HOWEVER CAUSED AND
+/*
+* Fingerprintjs2 2.0.0 - Modern & flexible browser fingerprint library v2
+* https://github.com/Valve/fingerprintjs2
+* Copyright (c) 2015 Valentin Vasilyev (valentin.vasilyev@outlook.com)
+* Licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) license.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED. IN NO EVENT SHALL VALENTIN VASILYEV BE LIABLE FOR ANY
+* DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
