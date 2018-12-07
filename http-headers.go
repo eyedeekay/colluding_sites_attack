@@ -45,7 +45,9 @@ func PageContent(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<html>%s`, "\n")
 	fmt.Fprintf(w, `<head>%s`, "\n")
 	fmt.Fprintf(w, `  <title> What is my Base64? </title>%s`, "\n")
-	fmt.Fprintf(w, `  <link rel="stylesheet" href="http://%s/css/styles.css">%s`, *sourcesite, "\n")
+    if *sourcesite != "" {
+        fmt.Fprintf(w, `  <link rel="stylesheet" href="http://%s/css/styles.css">%s`, *sourcesite, "\n")
+    }
 	fmt.Fprintf(w, `  <link rel="stylesheet" href="/styles.css">%s`, "\n")
 	fmt.Fprintf(w, `</head>%s`, "\n")
 	fmt.Fprintf(w, `  <body>%s`, "\n")
@@ -74,7 +76,9 @@ func PageContent(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `  <p><span id="details"/></p>%s`, "\n")
 	fmt.Fprintf(w, `  <button type="button" id="btn">Get my fingerprint</button>%s`, "\n")
 	fmt.Fprintf(w, `  <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
-	fmt.Fprintf(w, `  <script src="http://%s/include/fingerprint2.js"></script>%s`, *sourcesite, "\n")
+    if *sourcesite != "" {
+        fmt.Fprintf(w, `  <script src="http://%s/include/fingerprint2.js"></script>%s`, *sourcesite, "\n")
+    }
 	fmt.Fprintf(w, `  <script>%s`, "\n")
 	fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
 	fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
@@ -110,7 +114,7 @@ var (
 	host             = flag.String("host", "0.0.0.0", "host to forward")
 	port             = flag.String("port", "9777", "port to forward")
 	tag              = flag.String("tag", randSeq(4), "append to collude-* name")
-	sourcesite       = flag.String("resource", "3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p", "b32 address of site with resources")
+	sourcesite       = flag.String("resource", "gzr6cio3f3sepzofe24zhhrd733swb2ekxhe2ktjaw62z7rhf7va.b32.i2p", "b32 address of site with resources")
 	toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
 	fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
 	csspath          = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
