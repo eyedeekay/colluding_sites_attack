@@ -35,6 +35,31 @@ func FingerprintJS(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, fingerprintjs)
 }
 
+func LocalJS(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
+	fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
+	fmt.Fprintf(w, `      var fp = new Fingerprint2();%s`, "\n")
+	fmt.Fprintf(w, `      fp.get(function(result, components) {%s`, "\n")
+	fmt.Fprintf(w, `        var d2 = new Date();%s`, "\n")
+	fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";%s`, "\n")
+	fmt.Fprintf(w, `        var details = "<strong>Detailed information: </strong><br />";%s`, "\n")
+	fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {%s`, "\n")
+	fmt.Fprintf(w, `          console.log(timeString);%s`, "\n")
+	fmt.Fprintf(w, `          console.log(result);%s`, "\n")
+	fmt.Fprintf(w, `          for (var index in components) {%s`, "\n")
+	fmt.Fprintf(w, `            var obj = components[index];%s`, "\n")
+	fmt.Fprintf(w, `            var value = obj.value;%s`, "\n")
+	fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);%s`, "\n")
+	fmt.Fprintf(w, `            console.log(line);%s`, "\n")
+	fmt.Fprintf(w, `            details += line + "<br />";%s`, "\n")
+	fmt.Fprintf(w, `          }%s`, "\n")
+	fmt.Fprintf(w, `        }%s`, "\n")
+	fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details%s`, "\n")
+	fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result%s`, "\n")
+	fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString%s`, "\n")
+	fmt.Fprintf(w, `      });%s`, "\n")
+	fmt.Fprintf(w, `    });%s`, "\n")
+}
 
 // PageContent builds the page
 func PageContent(w http.ResponseWriter, r *http.Request) {
@@ -45,10 +70,11 @@ func PageContent(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<html>%s`, "\n")
 	fmt.Fprintf(w, `<head>%s`, "\n")
 	fmt.Fprintf(w, `  <title> What is my Base64? </title>%s`, "\n")
-    if *sourcesite != "" {
-        fmt.Fprintf(w, `  <link rel="stylesheet" href="http://%s/css/styles.css">%s`, *sourcesite, "\n")
-    }
-	fmt.Fprintf(w, `  <link rel="stylesheet" href="/styles.css">%s`, "\n")
+	if *sourcesite != "" {
+		fmt.Fprintf(w, `  <link rel="stylesheet" href="http://%s/css/styles.css">%s`, *sourcesite, "\n")
+	} else {
+		fmt.Fprintf(w, `  <link rel="stylesheet" href="/styles.css">%s`, "\n")
+	}
 	fmt.Fprintf(w, `</head>%s`, "\n")
 	fmt.Fprintf(w, `  <body>%s`, "\n")
 	fmt.Fprintf(w, `  <p>%s`, "\n")
@@ -75,34 +101,13 @@ func PageContent(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `  <p><code id="time"/></p>%s`, "\n")
 	fmt.Fprintf(w, `  <p><span id="details"/></p>%s`, "\n")
 	fmt.Fprintf(w, `  <button type="button" id="btn">Get my fingerprint</button>%s`, "\n")
-	fmt.Fprintf(w, `  <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
-    if *sourcesite != "" {
-        fmt.Fprintf(w, `  <script src="http://%s/include/fingerprint2.js"></script>%s`, *sourcesite, "\n")
-    }
+	if *sourcesite != "" {
+		fmt.Fprintf(w, `  <script src="http://%s/include/fingerprint2.js"></script>%s`, *sourcesite, "\n")
+	} else {
+		fmt.Fprintf(w, `  <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
+	}
 	fmt.Fprintf(w, `  <script>%s`, "\n")
-	fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
-	fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
-	fmt.Fprintf(w, `      var fp = new Fingerprint2();%s`, "\n")
-	fmt.Fprintf(w, `      fp.get(function(result, components) {%s`, "\n")
-	fmt.Fprintf(w, `        var d2 = new Date();%s`, "\n")
-	fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";%s`, "\n")
-	fmt.Fprintf(w, `        var details = "<strong>Detailed information: </strong><br />";%s`, "\n")
-	fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {%s`, "\n")
-	fmt.Fprintf(w, `          console.log(timeString);%s`, "\n")
-	fmt.Fprintf(w, `          console.log(result);%s`, "\n")
-	fmt.Fprintf(w, `          for (var index in components) {%s`, "\n")
-	fmt.Fprintf(w, `            var obj = components[index];%s`, "\n")
-	fmt.Fprintf(w, `            var value = obj.value;%s`, "\n")
-	fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);%s`, "\n")
-	fmt.Fprintf(w, `            console.log(line);%s`, "\n")
-	fmt.Fprintf(w, `            details += line + "<br />";%s`, "\n")
-	fmt.Fprintf(w, `          }%s`, "\n")
-	fmt.Fprintf(w, `        }%s`, "\n")
-	fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details%s`, "\n")
-	fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result%s`, "\n")
-	fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString%s`, "\n")
-	fmt.Fprintf(w, `      });%s`, "\n")
-	fmt.Fprintf(w, `    });%s`, "\n")
+	fmt.Fprintf(w, `  <script type="application/javascript" src="/local.js"></script>%s`, "\n")
 	fmt.Fprintf(w, `  </script>%s`, "\n")
 	fmt.Fprintf(w, `  </body>%s`, "\n")
 	fmt.Fprintf(w, `</html>%s`, "\n")
@@ -153,6 +158,7 @@ func main() {
 	http.HandleFunc("/", PageContent)
 	http.HandleFunc("/styles.css", CSSStyle)
 	http.HandleFunc("/fingerprint.js", FingerprintJS)
+	http.HandleFunc("/local.js", LocalJS)
 	log.Println("Colluder configured on:", forwarder.Base32())
 	log.Fatal(http.ListenAndServe(*host+":"+*port, nil))
 }
