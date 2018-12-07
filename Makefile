@@ -30,11 +30,13 @@ run: network run-service run-website
 
 run-volume: network
 	docker run -i -t -d \
+		--network si \
 		--name "collude-volume" \
 		-v reflect-volume:/home/reflect/ \
+		-v static-volume:/opt/eephttpd/ \
 		eyedeekay/colluding_sites_attack_service; true
 
-run-service: network run-volume nameattacker
+run-service: network run-volume
 	docker run -i -t \
 		-d \
 		-e TAG=$(attacker) \
@@ -54,6 +56,7 @@ run-website: network
 		--hostname fingerprint-website \
 		--restart always \
 		-p 127.0.0.1:8081:8081 \
+		--volumes-from collude-volume \
 		-v fingerprint-website:/home/eephttpd \
 		eyedeekay/colluding_sites_attack_website
 
