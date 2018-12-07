@@ -8,13 +8,12 @@ malicious purposes, and *any practical degradation of privacy of people seeking*
 *privacy is inherently malicous*. This is for *testing software for weaknesses*
 not for degrading privacy.
 
-It's not doing addressbook fingerprinting yet. Both may be added in the future
-as I get wierder with the browser.
+  * [Fingerprintjs](https://github.com/valve/fingerprintjs2)
+
+It's not doing addressbook fingerprinting yet.
 
 I think I might know how to do something pretty bad.
 
-zbprsnu26qqtm3cccx6imtm4rc2v3o474eezdd2mfj7x4bpcnqqq.b32.i2p
+in-i2p homepage: http://3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p
 
-ewfefipydldggbpbbevv5ctlhl2howdxkvql5hqornjgqcnwseya.b32.i2p
-ewfefipydldggbpbbevv5ctlhl2howdxkvql5hqornjgqcnwseya.b32.i2p
-tfsqszbqotdy4tm336nwxwl2oqcdi56ewtoesjdsfd6tmjaafr6q.b32.i2p
+  * 2018/12/07 07:48:55 Colluder configured on: ly5unhjuqbriik3h5kfncmzgqkeimavlszu5h3sap3rtid2qff5q.b32.i2p

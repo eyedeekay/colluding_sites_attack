@@ -1,0 +1,79 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>How Colluding Sites can Identify You</title>
+  <meta name="description" content="How Colluding Sites can Identify You">
+  <meta name="author" content="idk">
+
+  <link rel="stylesheet" href="/css/styles.css">
+
+</head>
+
+<body>
+
+<h1>How Colluding Sites can Identify You</h1>
+
+<p>This is a dangerous web site! In fact, pretty much all web sites are
+dangerous in theory. But this one's about the theory, so that makes it even
+more dangerous. It's intended to provide more information about already public
+information, suggest a change, and not to cause harm or alarm. I don't think
+you should use this information to do bad things to i2p users or the i2p
+network. Only click on the links on this page if you're curious about the
+matter of your i2p client tunnel destinationss. Also, for the record,
+<strong>this page </strong> is not recording any headers or logs of any kind,
+it's generated and hosted by the code hosted in
+https://github.com/eyedeekay/colluding_sites_attack. This is a transparent
+service for educational purposes only. </p>
+
+<h2>What does Identification mean in this context</h2>
+
+<p>By "Identification" I mean any characteristic which remains consistent in
+spite of what destination you are connected to, in particular, this is the
+normal operation of the i2p http proxy included with i2p and i2pd(presumably
+kovri as well if it has an http proxy). It's just a fact that in order to
+request a resource for retrieval, you have to provide an address to return
+that resource to. The http proxy is intended to do this in a very basic way,
+you get a destination when i2p starts up, and it's torn down when it shuts down.
+But while it's up, the destination stays the same. This is the normal operation
+of i2p, it's documented, and it's not because anyone's a bad person. It's
+because it's a demonstration of the network's functionality and I don't think
+that, necessarily, the i2p core developers need to do anything in the core about
+it. But I'll get to that in a second.</p>
+
+<h2>This attack does not, in and of itself, reveal your real IP Address* or
+any other marker thought to correspond to a real-life identity or location or
+context. Perish the thought.</h2>
+
+<h3>*However, if you viit the sites linked below, a variety of attacks will be
+carried out against your browser and your https proxy, one of which can reveal
+the IP address of an improperly configured browser and there's nothing the proxy
+can do about this. Make sure to always check [*] Use this proxy for all
+connections in Firefox. This is the default in surf and uzbl. I don't know about
+Chrome or IE. Don't click the links. They are here for me to test my software.<h3>
+
+<p>Because the tunnel is consistent across remote destinations, and because it
+has a useful lifespan, it could be used to identify traffic by someone running
+a network of colluding eepSites. If someone were using the default http proxy to
+use a centralized social network on i2p(Like, a maliciously modified mastodon
+instance or something), that could be used to build a profile of that person
+across renewed http proxy destinations. Every time you log in to that mastodon
+instance, your new http proxy destination becomes linked to the old one. God
+forbid if there's ever a facebook.i2p(remember, bypassing censorship and
+obfuscating location are valuable even without anonymity). So that's probably
+not a big deal right now, if most people on i2p are not participating in those
+kinds of social network directly, but it's present. It's pretty boring, it's not
+a bug, but it's present. Heck, it was even brought to my attention by someone
+else. I just made a demo after I was mostly done fabricating a solution because
+I needed to test it.</p>
+
+<h2>Furthermore, it's actually pretty useful to have destination tunnels with
+user-controlled lifespans</h2>
+
+<p>In fact, a long-term cryptographic destination is exactly the thing that
+allows you to host a hidden service. It's just that, with core i2p and i2pd, you
+have to manually separate your contextual identities.</p>
+
+<h3>X-I2P-Dest* Fingerprinting Demos</h3>

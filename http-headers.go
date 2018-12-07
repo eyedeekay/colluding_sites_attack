@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"html"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
@@ -11,8 +12,6 @@ import (
 )
 
 import "github.com/eyedeekay/sam-forwarder"
-
-type blah struct{}
 
 var forwarder *samforwarder.SAMForwarder
 
@@ -26,11 +25,20 @@ func randSeq(n int) string {
 	return string(b)
 }
 
-func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// CSSStyle prints the contents of the CSS file
+func CSSStyle(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, css)
+}
+
+// FingerprintJS prints the contents of fingeprint.js
+func FingerprintJS(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, fingerprintjs)
+}
+
+
+// PageContent builds the page
+func PageContent(w http.ResponseWriter, r *http.Request) {
 	log.Println("the echo service is responding to a request on:", forwarder.Base32())
-	csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s; ", *sourcesite)
-	csp_header += fmt.Sprintf("script-src 'self' api.ipify.org %s;", *sourcesite)
-	w.Header().Add("Content-Security-Policy", csp_header)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`<!DOCTYPE html>`))
 	fmt.Fprintf(w, "\n")
@@ -38,6 +46,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<head>%s`, "\n")
 	fmt.Fprintf(w, `  <title> What is my Base64? </title>%s`, "\n")
 	fmt.Fprintf(w, `  <link rel="stylesheet" href="http://%s/css/styles.css">%s`, *sourcesite, "\n")
+	fmt.Fprintf(w, `  <link rel="stylesheet" href="/styles.css">%s`, "\n")
 	fmt.Fprintf(w, `</head>%s`, "\n")
 	fmt.Fprintf(w, `  <body>%s`, "\n")
 	fmt.Fprintf(w, `  <p>%s`, "\n")
@@ -64,7 +73,7 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `  <p><code id="time"/></p>%s`, "\n")
 	fmt.Fprintf(w, `  <p><span id="details"/></p>%s`, "\n")
 	fmt.Fprintf(w, `  <button type="button" id="btn">Get my fingerprint</button>%s`, "\n")
-
+	fmt.Fprintf(w, `  <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
 	fmt.Fprintf(w, `  <script src="http://%s/include/fingerprint2.js"></script>%s`, *sourcesite, "\n")
 	fmt.Fprintf(w, `  <script>%s`, "\n")
 	fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
@@ -96,13 +105,17 @@ func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 var (
-	samhost    = flag.String("samhost", "sam-host", "host of the SAM to use")
-	samport    = flag.String("samport", "7656", "port of the SAM to use")
-	host       = flag.String("host", "0.0.0.0", "host to forward")
-	port       = flag.String("port", "9777", "port to forward")
-	tag        = flag.String("tag", randSeq(4), "append to collude-* name")
-	sourcesite = flag.String("resource", "3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p", "b32 address of site with resources")
-	toralso    = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
+	samhost          = flag.String("samhost", "sam-host", "host of the SAM to use")
+	samport          = flag.String("samport", "7656", "port of the SAM to use")
+	host             = flag.String("host", "0.0.0.0", "host to forward")
+	port             = flag.String("port", "9777", "port to forward")
+	tag              = flag.String("tag", randSeq(4), "append to collude-* name")
+	sourcesite       = flag.String("resource", "3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p", "b32 address of site with resources")
+	toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
+	fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
+	csspath          = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
+	fingerprintjs    string
+	css              string
 )
 
 func main() {
@@ -123,6 +136,19 @@ func main() {
 	} else {
 		go forwarder.Serve()
 	}
+	fbytes, err := ioutil.ReadFile(*fingperintjspath)
+	if err != nil {
+		panic(err)
+	}
+	fingerprintjs = string(fbytes)
+	cbytes, err := ioutil.ReadFile(*csspath)
+	if err != nil {
+		panic(err)
+	}
+	css = string(cbytes)
+	http.HandleFunc("/", PageContent)
+	http.HandleFunc("/styles.css", CSSStyle)
+	http.HandleFunc("/fingerprint.js", FingerprintJS)
 	log.Println("Colluder configured on:", forwarder.Base32())
-	log.Fatal(http.ListenAndServe(*host+":"+*port, &blah{}))
+	log.Fatal(http.ListenAndServe(*host+":"+*port, nil))
 }

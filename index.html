@@ -77,138 +77,165 @@ allows you to host a hidden service. It's just that, with core i2p and i2pd, you
 have to manually separate your contextual identities.</p>
 
 <h3>X-I2P-Dest* Fingerprinting Demos</h3>
-
 <ul>
-<li><a href="http://4pvyyb3phqznc6e6fjewty2fpbb4p3ub2q27ojheitcg4nai6p5q.b32.i2p">This site:</a> </li>
-<li><a href="http://lqnwvwsgio6k53zq6d7r5bpaxuslc45vgsiqo6i3ebshkqpgrnma.b32.i2p">Fingerprinting Site 1:</a> </li>
-<li><a href="http://zcofypupen75rdv5zihviweyw5emk2l34idq423kbhj7n3owoe5a.b32.i2p">Fingerprinting Site 2:</a></li>
-<li><a href="http://zjjjd756aucwz3pa2fl4mb3po2wtf752aefpod4gvedwreeox52q.b32.i2p">Fingerprinting Site 3:</a></li>
+<li>2018/12/07 07:48:55 Colluder configured on: ly5unhjuqbriik3h5kfncmzgqkeimavlszu5h3sap3rtid2qff5q.b32.i2p</li>
 </ul>
 
 <h3>The service code:</h3>
 
 <p>This is the code to the services behind those links, which will reveal your
 unique i2p destination.</p>
+<pre><code>    package main
 
-<pre><code>
+    import (
+        "flag"
+        "fmt"
+        "html"
+        "io/ioutil"
+        "log"
+        "math/rand"
+        "net/http"
+        "time"
+    )
 
-package main
+    import "github.com/eyedeekay/sam-forwarder"
 
-import (
-	"flag"
-	"fmt"
-	"log"
-	"math/rand"
-	"net/http"
-	"time"
-)
+    var forwarder *samforwarder.SAMForwarder
 
-import "github.com/eyedeekay/sam-forwarder"
+    var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-type blah struct{}
+    func randSeq(n int) string {
+        b := make([]rune, n)
+        for i := range b {
+            b[i] = letters[rand.Intn(len(letters))]
+        }
+        return string(b)
+    }
 
-var forwarder *samforwarder.SAMForwarder
+    func CSSStyle(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, css)
+    }
 
-var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    func FingerprintJS(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, fingerprintjs)
+    }
 
-func randSeq(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(b)
-}
+    func PageContent(w http.ResponseWriter, r *http.Request) {
+        log.Println("the echo service is responding to a request on:", forwarder.Base32())
+        w.WriteHeader(http.StatusOK)
+        w.Write([]byte(`&lt;!DOCTYPE html&gt;`))
+        fmt.Fprintf(w, "\n")
+        fmt.Fprintf(w, `&lt;html&gt;%s`, "\n")
+        fmt.Fprintf(w, `&lt;head&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;title&gt; What is my Base64? &lt;/title&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;link rel="stylesheet" href="http://%s/css/styles.css"&gt;%s`, *sourcesite, "\n")
+        fmt.Fprintf(w, `  &lt;link rel="stylesheet" href="/styles.css"&gt;%s`, "\n")
+        fmt.Fprintf(w, `&lt;/head&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;body&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;p&gt;%s`, "\n")
+        fmt.Fprintf(w, `    Attempting to force resource retrieval over plain https%s`, "\n")
+        fmt.Fprintf(w, `  &lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;pre&gt;&lt;code&gt;%s`, "\n")
+        fmt.Fprintf(w, "visited:%s\n", html.EscapeString(r.URL.Path))
+        for key, value := range r.Header {
+            log.Println(key, value)
+            fmt.Fprintf(w, "Header: %s, Value: %s \n", key, value)
+        }
+        fmt.Fprintf(w, `    &lt;/pre&gt;&lt;/code&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;script type="application/javascript"&gt;%s`, "\n")
+        fmt.Fprintf(w, `    function getIP(json) {%s`, "\n")
+        fmt.Fprintf(w, `      document.write("&lt;pre&gt;&lt;code&gt;");%s`, "\n")
+        fmt.Fprintf(w, `      document.write("My public IP address is:", json.ip);%s`, "\n")
+        fmt.Fprintf(w, `      document.write("&lt;/pre&gt;&lt;/code&gt;");%s`, "\n")
+        fmt.Fprintf(w, `    }%s`, "\n")
+        fmt.Fprintf(w, `  &lt;/script&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;script type="application/javascript" src="https://api.ipify.org?format=jsonp&amp;callback=getIP"&gt;&lt;/script&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;div id="container"&gt;&lt;/div&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;h3&gt;Fingerprintjs2&lt;/h3&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;p&gt;Your browser fingerprint: &lt;strong id="fp"&gt;&lt;/strong&gt;&lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;p&gt;&lt;code id="time"/&gt;&lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;p&gt;&lt;span id="details"/&gt;&lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;button type="button" id="btn"&gt;Get my fingerprint&lt;/button&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;script type="application/javascript" src="/fingerprint.js"&gt;&lt;/script&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;script src="http://%s/include/fingerprint2.js"&gt;&lt;/script&gt;%s`, *sourcesite, "\n")
+        fmt.Fprintf(w, `  &lt;script&gt;%s`, "\n")
+        fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
+        fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
+        fmt.Fprintf(w, `      var fp = new Fingerprint2();%s`, "\n")
+        fmt.Fprintf(w, `      fp.get(function(result, components) {%s`, "\n")
+        fmt.Fprintf(w, `        var d2 = new Date();%s`, "\n")
+        fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";%s`, "\n")
+        fmt.Fprintf(w, `        var details = "&lt;strong&gt;Detailed information: &lt;/strong&gt;&lt;br /&gt;";%s`, "\n")
+        fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {%s`, "\n")
+        fmt.Fprintf(w, `          console.log(timeString);%s`, "\n")
+        fmt.Fprintf(w, `          console.log(result);%s`, "\n")
+        fmt.Fprintf(w, `          for (var index in components) {%s`, "\n")
+        fmt.Fprintf(w, `            var obj = components[index];%s`, "\n")
+        fmt.Fprintf(w, `            var value = obj.value;%s`, "\n")
+        fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);%s`, "\n")
+        fmt.Fprintf(w, `            console.log(line);%s`, "\n")
+        fmt.Fprintf(w, `            details += line + "&lt;br /&gt;";%s`, "\n")
+        fmt.Fprintf(w, `          }%s`, "\n")
+        fmt.Fprintf(w, `        }%s`, "\n")
+        fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details%s`, "\n")
+        fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result%s`, "\n")
+        fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString%s`, "\n")
+        fmt.Fprintf(w, `      });%s`, "\n")
+        fmt.Fprintf(w, `    });%s`, "\n")
+        fmt.Fprintf(w, `  &lt;/script&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;/body&gt;%s`, "\n")
+        fmt.Fprintf(w, `&lt;/html&gt;%s`, "\n")
+    }
 
-func (b *blah) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("the echo service is responding to a request on:", forwarder.Base32())
-	fmt.Fprintf(w, `<!DOCTYPE html>n`)
-	fmt.Fprintf(w, `<html>n`)
-	fmt.Fprintf(w, `<head>n`)
-	fmt.Fprintf(w, `  <title> What is my Base64? </title>n`)
-	fmt.Fprintf(w, `  <link rel="stylesheet" href="http://3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p/css/styles.css">n`)
-	fmt.Fprintf(w, `</head>n`)
-	fmt.Fprintf(w, `  <body>n`)
-	fmt.Fprintf(w, `  <p>n`)
-	fmt.Fprintf(w, `    Attempting to force resource retrieval over plain https`)
-	fmt.Fprintf(w, `  </p>n`)
-	fmt.Fprintf(w, `    <pre><code>n`)
-	for key, value := range r.Header {
-		log.Println(key, value)
-		fmt.Fprintf(w, "Header: %s, Value: %sn", key, value)
-	}
-	fmt.Fprintf(w, `    </pre></code>n`)
-	fmt.Fprintf(w, `  <script type="application/javascript">n`)
-	fmt.Fprintf(w, `    function getIP(json) {n`)
-	fmt.Fprintf(w, `      document.write("<pre><code>");n`)
-	fmt.Fprintf(w, `      document.write("My public IP address is:", json.ip);n`)
-	fmt.Fprintf(w, `      document.write("</pre></code>");n`)
-	fmt.Fprintf(w, `    }n`)
-	fmt.Fprintf(w, `  </script>n`)
-	fmt.Fprintf(w, `  <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>n`)
-    fmt.Fprintf(w, `  <div id="container"></div>`)
-    fmt.Fprintf(w, `  <h3>Fingerprintjs2</h3>`)
-    fmt.Fprintf(w, `  <p>Your browser fingerprint: <strong id="fp"></strong></p>`)
-    fmt.Fprintf(w, `  <p><code id="time"/></p>`)
-    fmt.Fprintf(w, `  <p><span id="details"/></p>`)
-    fmt.Fprintf(w, `  <button type="button" id="btn">Get my fingerprint</button>`)
+    var (
+        samhost          = flag.String("samhost", "sam-host", "host of the SAM to use")
+        samport          = flag.String("samport", "7656", "port of the SAM to use")
+        host             = flag.String("host", "0.0.0.0", "host to forward")
+        port             = flag.String("port", "9777", "port to forward")
+        tag              = flag.String("tag", randSeq(4), "append to collude-* name")
+        sourcesite       = flag.String("resource", "3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p", "b32 address of site with resources")
+        toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
+        fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
+        csspath          = flag.String("css", "css/styles.css", "Load CSS file from this source file")
+        fingerprintjs    string
+        css              string
+    )
 
-    fmt.Fprintf(w, `  <script src="http://3dpwhxxcp47t7h6pnejm5hw7ymv56ywee3zdhct2sbctubsb3yra.b32.i2p/include/fingerprint2.js"></script>`)
-    fmt.Fprintf(w, `  <script>`)
-    fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {`)
-    fmt.Fprintf(w, `      var d1 = new Date();`)
-    fmt.Fprintf(w, `      var fp = new Fingerprint2();`)
-    fmt.Fprintf(w, `      fp.get(function(result, components) {`)
-    fmt.Fprintf(w, `        var d2 = new Date();`)
-    fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";`)
-    fmt.Fprintf(w, `        var details = "<strong>Detailed information: </strong><br />";`)
-    fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {`)
-    fmt.Fprintf(w, `          console.log(timeString);`)
-    fmt.Fprintf(w, `          console.log(result);`)
-    fmt.Fprintf(w, `          for (var index in components) {`)
-    fmt.Fprintf(w, `            var obj = components[index];`)
-    fmt.Fprintf(w, `            var value = obj.value;`)
-    fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);`)
-    fmt.Fprintf(w, `            console.log(line);`)
-    fmt.Fprintf(w, `            details += line + "<br />";`)
-    fmt.Fprintf(w, `          }`)
-    fmt.Fprintf(w, `        }`)
-    fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details`)
-    fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result`)
-    fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString`)
-    fmt.Fprintf(w, `      });`)
-    fmt.Fprintf(w, `    });`)
-    fmt.Fprintf(w, `  </script>`)
-	fmt.Fprintf(w, `  </body>n`)
-	fmt.Fprintf(w, `</html>n`)
-}
-
-func main() {
-	var err error
-	rand.Seed(time.Now().UnixNano())
-	log.Println("starting go echo service")
-	samhost := flag.String("samhost", "sam-host", "host of the SAM to use")
-	samport := flag.String("samport", "7656", "port of the SAM to use")
-	host := flag.String("host", "0.0.0.0", "host to forward")
-	port := flag.String("port", "9777", "port to forward")
-	flag.Parse()
-	if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
-		samforwarder.SetSaveFile(true),
-		samforwarder.SetName("collude-"+randSeq(4)),
-		samforwarder.SetSAMHost(*samhost),
-		samforwarder.SetSAMPort(*samport),
-		samforwarder.SetHost(*host),
-		samforwarder.SetPort(*port),
-	); err != nil {
-		log.Fatal(err.Error())
-	} else {
-		go forwarder.Serve()
-	}
-	log.Println("Colluder configured on:", forwarder.Base32())
-	log.Fatal(http.ListenAndServe(*host+":"+*port, &blah{}))
-}
-
+    func main() {
+        var err error
+        rand.Seed(time.Now().UnixNano())
+        log.Println("starting go echo service")
+        flag.Parse()
+        if forwarder, err = samforwarder.NewSAMForwarderFromOptions(
+            samforwarder.SetSaveFile(true),
+            samforwarder.SetName("collude-"+*tag),
+            samforwarder.SetSAMHost(*samhost),
+            samforwarder.SetSAMPort(*samport),
+            samforwarder.SetHost(*host),
+            samforwarder.SetPort(*port),
+            samforwarder.SetType("http"),
+        ); err != nil {
+            log.Fatal(err.Error())
+        } else {
+            go forwarder.Serve()
+        }
+        fbytes, err := ioutil.ReadFile(*fingperintjspath)
+        if err != nil {
+            panic(err)
+        }
+        fingerprintjs = string(fbytes)
+        cbytes, err := ioutil.ReadFile(*csspath)
+        if err != nil {
+            panic(err)
+        }
+        css = string(cbytes)
+        http.HandleFunc("/", PageContent)
+        http.HandleFunc("/styles.css", CSSStyle)
+        http.HandleFunc("/fingerprint.js", FingerprintJS)
+        log.Println("Colluder configured on:", forwarder.Base32())
+        log.Fatal(http.ListenAndServe(*host+":"+*port, nil))
+    }
 </code></pre>
-
 <h2>An experimental solution that can exist outside of core i2p</h2>
 
 <p>The obvious answer to this problem is to alter the http proxy to generate a

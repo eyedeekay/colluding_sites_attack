@@ -1,0 +1,20 @@
+<h2>An experimental solution that can exist outside of core i2p</h2>
+
+<p>The obvious answer to this problem is to alter the http proxy to generate a
+new destination for every eepsite it visits. But it would add bloat and it's
+actually more in-scope for an external application using i2p's SAMv3 API to
+generate tunnels on the fly. Which is why I'm building and using(dogfooding)
+si-i2p-plugin, who's source code is available on github at
+https://github.com/eyedeekay/si-i2p-plugin. It presents an http proxy on port
+4443, which generates a new i2p destination for each i2p destination it has to
+retrieve. It then routes all requests to that eepSite through that tunnel and
+forwards it to the new http proxy, thereby providing some automatic isolation of
+contextual identities. Keep in mind, my approach is experimental, which is why
+this site exists. I am actively using these sites to test this software. I am
+not conducting an attack, at least not on anyone else.</p>
+
+<p>In addition to the http proxy, it provides a file-based management interface
+for the tunnels it creates. for more information, see the github repo for now,
+and eventually an eepSite which I'll link here when I put it up.</p>
+
+</body>

@@ -24,6 +24,7 @@ usage:
 
 include include/config.mk
 include include/setup.mk
+include attack
 
 run: network run-service run-website
 
@@ -33,7 +34,7 @@ run-volume: network
 		-v reflect-volume:/home/reflect/ \
 		eyedeekay/colluding_sites_attack_service; true
 
-run-service: network run-volume
+run-service: network run-volume nameattacker
 	docker run -i -t \
 		-d \
 		-e TAG=$(attacker) \
@@ -42,7 +43,9 @@ run-service: network run-volume
 		--restart always \
 		--volumes-from collude-volume \
 		eyedeekay/colluding_sites_attack_service
-	docker logs "collude-$(attacker)" | tee -a colluders.md
+	sleep 5
+	@echo -n "  * " | tee -a colluders.md
+	docker logs "collude-$(attacker)" | grep "b32.i2p" | head -n 1 | tee -a colluders.md
 
 run-website: network
 	docker run -d --name fingerprint-website \
@@ -69,3 +72,24 @@ deps:
 compile:
 	go build http-headers.go
 
+codemd:
+	@echo -n "        " > temp.md
+	cat http-headers.go >> temp.md
+	awk 1 ORS='\n        ' temp.md > code.md
+	rm -r temp.md
+
+index: codemd
+	cat include/index.top.html > index.html
+	markdown colluders.md >> index.html
+	cat include/index.middle.html >> index.html
+	markdown code.md >> index.html
+	cat include/index.bottom.html >> index.html
+
+finger:
+	wget -qO include/fingerprint2.js https://github.com/Valve/fingerprintjs2/raw/master/fingerprint2.js
+
+readme:
+	head -n $(SAVE_README_LINES) README.md > TEMPREADME.md
+	@echo "" >> TEMPREADME.md
+	cat TEMPREADME.md colluders.md > README.md
+	rm -f TEMPREADME.md
