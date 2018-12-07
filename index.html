@@ -78,10 +78,11 @@ have to manually separate your contextual identities.</p>
 
 <h3>X-I2P-Dest* Fingerprinting Demos</h3>
 <ul>
-<li>2018/12/07 11:05:34 Colluder configured on: fl7rhqiyyymdrh3feravsz6qqblwbxphauc3ph2j3nlik3pc73cq.b32.i2p</li>
-<li>2018/12/07 11:07:00 Colluder configured on: 5xwwokcc5emp25cnihhioqr3u37l2khp47ndxezpdq77r5hjfo5a.b32.i2p</li>
-<li>2018/12/07 11:07:20 Colluder configured on: jnr3mlwgyxkaskvzuf3artoqpeua3jwoai6tgvnln7tteuscgemq.b32.i2p</li>
+<li>2018/12/07 11:30:20 Colluder configured on: huxr3w6wzpmrgkpkhwnvlfdi4qwnprgomt55ibfsp6mvwl677sna.b32.i2p</li>
+<li>2018/12/07 11:31:19 Colluder configured on: nvddzl7fhl3zvblvtbzza37xzgnpk6zshre4ptpxs2rgdu7lemra.b32.i2p</li>
+<li>2018/12/07 11:31:38 Colluder configured on: raf22joeikva4zgr2p7q5mihogtavpm2bvianwsk7thio746ou2a.b32.i2p</li>
 </ul>
+
 <h3>The service code:</h3>
 
 <p>This is the code to the services behind those links, which will reveal your
@@ -134,29 +135,7 @@ unique i2p destination.</p>
 
     // LocalJS loads the on-page components of fingerprintjs
     func LocalJS(w http.ResponseWriter, r *http.Request) {
-        fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
-        fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
-        fmt.Fprintf(w, `      var fp = new Fingerprint2();%s`, "\n")
-        fmt.Fprintf(w, `      fp.get(function(result, components) {%s`, "\n")
-        fmt.Fprintf(w, `        var d2 = new Date();%s`, "\n")
-        fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";%s`, "\n")
-        fmt.Fprintf(w, `        var details = "&lt;strong&gt;Detailed information: &lt;/strong&gt;&lt;br /&gt;";%s`, "\n")
-        fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {%s`, "\n")
-        fmt.Fprintf(w, `          console.log(timeString);%s`, "\n")
-        fmt.Fprintf(w, `          console.log(result);%s`, "\n")
-        fmt.Fprintf(w, `          for (var index in components) {%s`, "\n")
-        fmt.Fprintf(w, `            var obj = components[index];%s`, "\n")
-        fmt.Fprintf(w, `            var value = obj.value;%s`, "\n")
-        fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);%s`, "\n")
-        fmt.Fprintf(w, `            console.log(line);%s`, "\n")
-        fmt.Fprintf(w, `            details += line + "&lt;br /&gt;";%s`, "\n")
-        fmt.Fprintf(w, `          }%s`, "\n")
-        fmt.Fprintf(w, `        }%s`, "\n")
-        fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details%s`, "\n")
-        fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result%s`, "\n")
-        fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString%s`, "\n")
-        fmt.Fprintf(w, `      });%s`, "\n")
-        fmt.Fprintf(w, `    });%s`, "\n")
+        fmt.Fprintf(w, localjs)
     }
 
     // FingerSection prints the FingerprintJS section of the page.
@@ -231,8 +210,10 @@ unique i2p destination.</p>
         sourcesite       = flag.String("resource", "none", "b32 address of site with resources")
         toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
         fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
+        jspath           = flag.String("js", "./include/local.js", "Load local javascript from this source file.")
         csspath          = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
         fingerprintjs    string
+        localjs          string
         css              string
     )
 
@@ -264,6 +245,11 @@ unique i2p destination.</p>
             panic(err)
         }
         css = string(cbytes)
+        lbytes, err := ioutil.ReadFile(*jspath)
+        if err != nil {
+            panic(err)
+        }
+        localjs = string(lbytes)
         http.HandleFunc("/", PageContent)
         http.HandleFunc("/styles.css", CSSStyle)
         http.HandleFunc("/fingerprint.js", FingerprintJS)
