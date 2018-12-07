@@ -96,7 +96,7 @@ func HeaderSection(w http.ResponseWriter, r *http.Request) {
 	if *sourcesite != "none" {
 		fmt.Fprintf(w, `  <link rel="stylesheet" href="http://%s/css/styles.css">%s`, *sourcesite, "\n")
 	} else {
-		fmt.Fprintf(w, `  <link rel="stylesheet" href="/styles.css">%s`, "\n")
+		fmt.Fprintf(w, `  <link rel="stylesheet" type="text/css" href="/styles.css">%s`, "\n")
 	}
 	fmt.Fprintf(w, `</head>%s`, "\n")
 }
