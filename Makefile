@@ -39,7 +39,7 @@ run-volume: network
 		--network si \
 		--name "site-volume" \
 		-v static-volume:/opt/eephttpd/ \
-		eyedeekay/colluding_sites_attack_service; true
+		eyedeekay/colluding_sites_attack_website; true
 
 run-service: network run-volume
 	docker run -i -t \
