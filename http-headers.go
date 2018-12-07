@@ -64,13 +64,16 @@ func LocalJS(w http.ResponseWriter, r *http.Request) {
 // PageContent builds the page
 func PageContent(w http.ResponseWriter, r *http.Request) {
 	log.Println("the echo service is responding to a request on:", forwarder.Base32())
+	csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s; ", *sourcesite)
+	csp_header += fmt.Sprintf("script-src 'self' api.ipify.org %s;", *sourcesite)
+	w.Header().Add("Content-Security-Policy", csp_header)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`<!DOCTYPE html>`))
 	fmt.Fprintf(w, "\n")
 	fmt.Fprintf(w, `<html>%s`, "\n")
 	fmt.Fprintf(w, `<head>%s`, "\n")
 	fmt.Fprintf(w, `  <title> What is my Base64? </title>%s`, "\n")
-	if *sourcesite != "" {
+	if *sourcesite != "none" {
 		fmt.Fprintf(w, `  <link rel="stylesheet" href="http://%s/css/styles.css">%s`, *sourcesite, "\n")
 	} else {
 		fmt.Fprintf(w, `  <link rel="stylesheet" href="/styles.css">%s`, "\n")
@@ -101,8 +104,8 @@ func PageContent(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `  <p><code id="time"/></p>%s`, "\n")
 	fmt.Fprintf(w, `  <p><span id="details"/></p>%s`, "\n")
 	fmt.Fprintf(w, `  <button type="button" id="btn">Get my fingerprint</button>%s`, "\n")
-	if *sourcesite != "" {
-		fmt.Fprintf(w, `  <script src="http://%s/include/fingerprint2.js"></script>%s`, *sourcesite, "\n")
+	if *sourcesite != "none" {
+		fmt.Fprintf(w, `  <script type="application/javascript" src="http://%s/include/fingerprint2.js"></script>%s`, *sourcesite, "\n")
 	} else {
 		fmt.Fprintf(w, `  <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
 	}
@@ -119,7 +122,7 @@ var (
 	host             = flag.String("host", "0.0.0.0", "host to forward")
 	port             = flag.String("port", "9777", "port to forward")
 	tag              = flag.String("tag", randSeq(4), "append to collude-* name")
-	sourcesite       = flag.String("resource", "", "b32 address of site with resources")
+	sourcesite       = flag.String("resource", "none", "b32 address of site with resources")
 	toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
 	fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
 	csspath          = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
