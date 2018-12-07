@@ -114,7 +114,7 @@ var (
 	host             = flag.String("host", "0.0.0.0", "host to forward")
 	port             = flag.String("port", "9777", "port to forward")
 	tag              = flag.String("tag", randSeq(4), "append to collude-* name")
-	sourcesite       = flag.String("resource", "gzr6cio3f3sepzofe24zhhrd733swb2ekxhe2ktjaw62z7rhf7va.b32.i2p", "b32 address of site with resources")
+	sourcesite       = flag.String("resource", "", "b32 address of site with resources")
 	toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
 	fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
 	csspath          = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
