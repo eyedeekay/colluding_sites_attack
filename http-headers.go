@@ -46,35 +46,13 @@ func GetIP(w http.ResponseWriter, r *http.Request) {
 
 // LocalJS loads the on-page components of fingerprintjs
 func LocalJS(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
-	fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
-	fmt.Fprintf(w, `      var fp = new Fingerprint2();%s`, "\n")
-	fmt.Fprintf(w, `      fp.get(function(result, components) {%s`, "\n")
-	fmt.Fprintf(w, `        var d2 = new Date();%s`, "\n")
-	fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";%s`, "\n")
-	fmt.Fprintf(w, `        var details = "<strong>Detailed information: </strong><br />";%s`, "\n")
-	fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {%s`, "\n")
-	fmt.Fprintf(w, `          console.log(timeString);%s`, "\n")
-	fmt.Fprintf(w, `          console.log(result);%s`, "\n")
-	fmt.Fprintf(w, `          for (var index in components) {%s`, "\n")
-	fmt.Fprintf(w, `            var obj = components[index];%s`, "\n")
-	fmt.Fprintf(w, `            var value = obj.value;%s`, "\n")
-	fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);%s`, "\n")
-	fmt.Fprintf(w, `            console.log(line);%s`, "\n")
-	fmt.Fprintf(w, `            details += line + "<br />";%s`, "\n")
-	fmt.Fprintf(w, `          }%s`, "\n")
-	fmt.Fprintf(w, `        }%s`, "\n")
-	fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details%s`, "\n")
-	fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result%s`, "\n")
-	fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString%s`, "\n")
-	fmt.Fprintf(w, `      });%s`, "\n")
-	fmt.Fprintf(w, `    });%s`, "\n")
+	fmt.Fprintf(w, localjs)
 }
 
 // FingerSection prints the FingerprintJS section of the page.
 func FingerSection(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, `  <div id="fingerprintjs">%s`, "\n")
-    fmt.Fprintf(w, `    <h3>Fingerprintjs2</h3>%s`, "\n")
+	fmt.Fprintf(w, `  <div id="fingerprintjs">%s`, "\n")
+	fmt.Fprintf(w, `    <h3>Fingerprintjs2</h3>%s`, "\n")
 	fmt.Fprintf(w, `    <p>Your browser fingerprint: <strong id="fp"></strong></p>%s`, "\n")
 	fmt.Fprintf(w, `    <p><code id="time"/></p>%s`, "\n")
 	fmt.Fprintf(w, `    <p><span id="details"/></p>%s`, "\n")
@@ -85,13 +63,13 @@ func FingerSection(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, `    <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
 	}
 	fmt.Fprintf(w, `    <script type="application/javascript" src="/local.js"></script>%s`, "\n")
-    fmt.Fprintf(w, `  </div>%s`, "\n")
+	fmt.Fprintf(w, `  </div>%s`, "\n")
 }
 
 // IPSection prints the browser misconfiguration IP leak section
 func IPSection(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, `  <div id="browsertest">%s`, "\n")
-    fmt.Fprintf(w, `    <p>%s`, "\n")
+	fmt.Fprintf(w, `  <div id="browsertest">%s`, "\n")
+	fmt.Fprintf(w, `    <p>%s`, "\n")
 	fmt.Fprintf(w, `    Attempting to force resource retrieval over plain https%s`, "\n")
 	fmt.Fprintf(w, `    </p>%s`, "\n")
 	fmt.Fprintf(w, `      <pre><code>%s`, "\n")
@@ -103,11 +81,11 @@ func IPSection(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `      </pre></code>%s`, "\n")
 	fmt.Fprintf(w, `    <script type="application/javascript" src="/getip.js"></script>%s`, "\n")
 	fmt.Fprintf(w, `    <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>%s`, "\n")
-    fmt.Fprintf(w, `  </div>%s`, "\n")
+	fmt.Fprintf(w, `  </div>%s`, "\n")
 }
 
 func HeaderSection(w http.ResponseWriter, r *http.Request) {
-    csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s %s; ", forwarder.Base32(), *sourcesite)
+	csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s %s; ", forwarder.Base32(), *sourcesite)
 	w.Header().Add("Content-Security-Policy", csp_header)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`<!DOCTYPE html>`))
@@ -126,10 +104,10 @@ func HeaderSection(w http.ResponseWriter, r *http.Request) {
 // PageContent builds the page
 func PageContent(w http.ResponseWriter, r *http.Request) {
 	log.Println("the echo service is responding to a request on:", forwarder.Base32())
-    HeaderSection(w, r)
+	HeaderSection(w, r)
 	fmt.Fprintf(w, `  <body>%s`, "\n")
-    IPSection(w, r)
-    FingerSection(w, r)
+	IPSection(w, r)
+	FingerSection(w, r)
 	fmt.Fprintf(w, `  </body>%s`, "\n")
 	fmt.Fprintf(w, `</html>%s`, "\n")
 }
@@ -143,8 +121,10 @@ var (
 	sourcesite       = flag.String("resource", "none", "b32 address of site with resources")
 	toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
 	fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
+	jspath           = flag.String("js", "./include/local.js", "Load local javascript from this source file.")
 	csspath          = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
 	fingerprintjs    string
+	localjs          string
 	css              string
 )
 
@@ -176,6 +156,11 @@ func main() {
 		panic(err)
 	}
 	css = string(cbytes)
+	lbytes, err := ioutil.ReadFile(*jspath)
+	if err != nil {
+		panic(err)
+	}
+	localjs = string(lbytes)
 	http.HandleFunc("/", PageContent)
 	http.HandleFunc("/styles.css", CSSStyle)
 	http.HandleFunc("/fingerprint.js", FingerprintJS)
