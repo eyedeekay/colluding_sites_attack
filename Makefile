@@ -28,6 +28,9 @@ include attack
 
 run: network run-service run-website
 
+fire:
+	make nameattacker && make run-service
+
 run-volume: network
 	docker run -i -t -d \
 		-e TAG=$(attacker) \

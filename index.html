@@ -78,9 +78,10 @@ have to manually separate your contextual identities.</p>
 
 <h3>X-I2P-Dest* Fingerprinting Demos</h3>
 <ul>
-<li>2018/12/07 07:48:55 Colluder configured on: ly5unhjuqbriik3h5kfncmzgqkeimavlszu5h3sap3rtid2qff5q.b32.i2p</li>
+<li>2018/12/07 10:28:52 Colluder configured on: wn6w3y3o6imlqpqwc4h7ca5zrdcyeemn3fprl6yqkerdhirylx5a.b32.i2p</li>
+<li>2018/12/07 10:29:22 Colluder configured on: xbqr5xw2lk5hqjgosloi42ehbpvjudrna2gqxwjt6f65ndaqqowq.b32.i2p</li>
+<li>2018/12/07 10:29:30 Colluder configured on: u3kd7yp4w433xl57ucrdk62mgbscjb6b7tc6t3osfdhryfyxqkza.b32.i2p</li>
 </ul>
-
 <h3>The service code:</h3>
 
 <p>This is the code to the services behind those links, which will reveal your
@@ -122,20 +123,49 @@ unique i2p destination.</p>
         fmt.Fprintf(w, fingerprintjs)
     }
 
+    func LocalJS(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
+        fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
+        fmt.Fprintf(w, `      var fp = new Fingerprint2();%s`, "\n")
+        fmt.Fprintf(w, `      fp.get(function(result, components) {%s`, "\n")
+        fmt.Fprintf(w, `        var d2 = new Date();%s`, "\n")
+        fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";%s`, "\n")
+        fmt.Fprintf(w, `        var details = "&lt;strong&gt;Detailed information: &lt;/strong&gt;&lt;br /&gt;";%s`, "\n")
+        fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {%s`, "\n")
+        fmt.Fprintf(w, `          console.log(timeString);%s`, "\n")
+        fmt.Fprintf(w, `          console.log(result);%s`, "\n")
+        fmt.Fprintf(w, `          for (var index in components) {%s`, "\n")
+        fmt.Fprintf(w, `            var obj = components[index];%s`, "\n")
+        fmt.Fprintf(w, `            var value = obj.value;%s`, "\n")
+        fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);%s`, "\n")
+        fmt.Fprintf(w, `            console.log(line);%s`, "\n")
+        fmt.Fprintf(w, `            details += line + "&lt;br /&gt;";%s`, "\n")
+        fmt.Fprintf(w, `          }%s`, "\n")
+        fmt.Fprintf(w, `        }%s`, "\n")
+        fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details%s`, "\n")
+        fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result%s`, "\n")
+        fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString%s`, "\n")
+        fmt.Fprintf(w, `      });%s`, "\n")
+        fmt.Fprintf(w, `    });%s`, "\n")
+    }
 
     // PageContent builds the page
     func PageContent(w http.ResponseWriter, r *http.Request) {
         log.Println("the echo service is responding to a request on:", forwarder.Base32())
+        csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s; ", *sourcesite)
+        csp_header += fmt.Sprintf("script-src 'self' api.ipify.org %s;", *sourcesite)
+        w.Header().Add("Content-Security-Policy", csp_header)
         w.WriteHeader(http.StatusOK)
         w.Write([]byte(`&lt;!DOCTYPE html&gt;`))
         fmt.Fprintf(w, "\n")
         fmt.Fprintf(w, `&lt;html&gt;%s`, "\n")
         fmt.Fprintf(w, `&lt;head&gt;%s`, "\n")
         fmt.Fprintf(w, `  &lt;title&gt; What is my Base64? &lt;/title&gt;%s`, "\n")
-        if *sourcesite != "" {
+        if *sourcesite != "none" {
             fmt.Fprintf(w, `  &lt;link rel="stylesheet" href="http://%s/css/styles.css"&gt;%s`, *sourcesite, "\n")
+        } else {
+            fmt.Fprintf(w, `  &lt;link rel="stylesheet" href="/styles.css"&gt;%s`, "\n")
         }
-        fmt.Fprintf(w, `  &lt;link rel="stylesheet" href="/styles.css"&gt;%s`, "\n")
         fmt.Fprintf(w, `&lt;/head&gt;%s`, "\n")
         fmt.Fprintf(w, `  &lt;body&gt;%s`, "\n")
         fmt.Fprintf(w, `  &lt;p&gt;%s`, "\n")
@@ -162,34 +192,13 @@ unique i2p destination.</p>
         fmt.Fprintf(w, `  &lt;p&gt;&lt;code id="time"/&gt;&lt;/p&gt;%s`, "\n")
         fmt.Fprintf(w, `  &lt;p&gt;&lt;span id="details"/&gt;&lt;/p&gt;%s`, "\n")
         fmt.Fprintf(w, `  &lt;button type="button" id="btn"&gt;Get my fingerprint&lt;/button&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;script type="application/javascript" src="/fingerprint.js"&gt;&lt;/script&gt;%s`, "\n")
-        if *sourcesite != "" {
-            fmt.Fprintf(w, `  &lt;script src="http://%s/include/fingerprint2.js"&gt;&lt;/script&gt;%s`, *sourcesite, "\n")
+        if *sourcesite != "none" {
+            fmt.Fprintf(w, `  &lt;script type="application/javascript" src="http://%s/include/fingerprint2.js"&gt;&lt;/script&gt;%s`, *sourcesite, "\n")
+        } else {
+            fmt.Fprintf(w, `  &lt;script type="application/javascript" src="/fingerprint.js"&gt;&lt;/script&gt;%s`, "\n")
         }
         fmt.Fprintf(w, `  &lt;script&gt;%s`, "\n")
-        fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
-        fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
-        fmt.Fprintf(w, `      var fp = new Fingerprint2();%s`, "\n")
-        fmt.Fprintf(w, `      fp.get(function(result, components) {%s`, "\n")
-        fmt.Fprintf(w, `        var d2 = new Date();%s`, "\n")
-        fmt.Fprintf(w, `        var timeString = "Time took to calculate the fingerprint: " + (d2 - d1) + "ms";%s`, "\n")
-        fmt.Fprintf(w, `        var details = "&lt;strong&gt;Detailed information: &lt;/strong&gt;&lt;br /&gt;";%s`, "\n")
-        fmt.Fprintf(w, `        if(typeof window.console !== "undefined") {%s`, "\n")
-        fmt.Fprintf(w, `          console.log(timeString);%s`, "\n")
-        fmt.Fprintf(w, `          console.log(result);%s`, "\n")
-        fmt.Fprintf(w, `          for (var index in components) {%s`, "\n")
-        fmt.Fprintf(w, `            var obj = components[index];%s`, "\n")
-        fmt.Fprintf(w, `            var value = obj.value;%s`, "\n")
-        fmt.Fprintf(w, `            var line = obj.key + " = " + value.toString().substr(0, 100);%s`, "\n")
-        fmt.Fprintf(w, `            console.log(line);%s`, "\n")
-        fmt.Fprintf(w, `            details += line + "&lt;br /&gt;";%s`, "\n")
-        fmt.Fprintf(w, `          }%s`, "\n")
-        fmt.Fprintf(w, `        }%s`, "\n")
-        fmt.Fprintf(w, `        document.querySelector("#details").innerHTML = details%s`, "\n")
-        fmt.Fprintf(w, `        document.querySelector("#fp").textContent = result%s`, "\n")
-        fmt.Fprintf(w, `        document.querySelector("#time").textContent = timeString%s`, "\n")
-        fmt.Fprintf(w, `      });%s`, "\n")
-        fmt.Fprintf(w, `    });%s`, "\n")
+        fmt.Fprintf(w, `  &lt;script type="application/javascript" src="/local.js"&gt;&lt;/script&gt;%s`, "\n")
         fmt.Fprintf(w, `  &lt;/script&gt;%s`, "\n")
         fmt.Fprintf(w, `  &lt;/body&gt;%s`, "\n")
         fmt.Fprintf(w, `&lt;/html&gt;%s`, "\n")
@@ -201,7 +210,7 @@ unique i2p destination.</p>
         host             = flag.String("host", "0.0.0.0", "host to forward")
         port             = flag.String("port", "9777", "port to forward")
         tag              = flag.String("tag", randSeq(4), "append to collude-* name")
-        sourcesite       = flag.String("resource", "", "b32 address of site with resources")
+        sourcesite       = flag.String("resource", "none", "b32 address of site with resources")
         toralso          = flag.Bool("tor", false, "Also deploy a Tor Onion Service and try to weaken Tor Browsing")
         fingperintjspath = flag.String("finger", "./include/fingerprint2.js", "Load fingerprintjs from this source file.")
         csspath          = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
@@ -240,6 +249,7 @@ unique i2p destination.</p>
         http.HandleFunc("/", PageContent)
         http.HandleFunc("/styles.css", CSSStyle)
         http.HandleFunc("/fingerprint.js", FingerprintJS)
+        http.HandleFunc("/local.js", LocalJS)
         log.Println("Colluder configured on:", forwarder.Base32())
         log.Fatal(http.ListenAndServe(*host+":"+*port, nil))
     }
