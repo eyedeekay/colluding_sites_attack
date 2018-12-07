@@ -1,4 +1,5 @@
 FROM eyedeekay/eephttpd
+VOLUME /opt/eephttpd/
 COPY css/styles.css /opt/eephttpd/www/css/styles.css
 COPY index.html /opt/eephttpd/www/index.html
 COPY favicon.ico /opt/eephttpd/www/favicon.ico
