@@ -5,5 +5,4 @@ COPY favicon.ico /opt/eephttpd/www/favicon.ico
 COPY include/fingerprint2.js /opt/eephttpd/www/include/fingerprint2.js
 COPY /etc/eephttpd.conf /etc/eephttpd/eephttpd.conf
 USER eephttpd
-RUN chown -R eephttpd /opt/eephttpd/
 CMD eephttpd -f /etc/eephttpd/eephttpd.conf -n fingerprintwebsite -s /opt/eephttpd/ -sh=sam-host -sp=7656 -r
