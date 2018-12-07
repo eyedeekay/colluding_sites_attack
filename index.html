@@ -78,9 +78,9 @@ have to manually separate your contextual identities.</p>
 
 <h3>X-I2P-Dest* Fingerprinting Demos</h3>
 <ul>
-<li>2018/12/07 10:28:52 Colluder configured on: wn6w3y3o6imlqpqwc4h7ca5zrdcyeemn3fprl6yqkerdhirylx5a.b32.i2p</li>
-<li>2018/12/07 10:29:22 Colluder configured on: xbqr5xw2lk5hqjgosloi42ehbpvjudrna2gqxwjt6f65ndaqqowq.b32.i2p</li>
-<li>2018/12/07 10:29:30 Colluder configured on: u3kd7yp4w433xl57ucrdk62mgbscjb6b7tc6t3osfdhryfyxqkza.b32.i2p</li>
+<li>2018/12/07 11:05:34 Colluder configured on: fl7rhqiyyymdrh3feravsz6qqblwbxphauc3ph2j3nlik3pc73cq.b32.i2p</li>
+<li>2018/12/07 11:07:00 Colluder configured on: 5xwwokcc5emp25cnihhioqr3u37l2khp47ndxezpdq77r5hjfo5a.b32.i2p</li>
+<li>2018/12/07 11:07:20 Colluder configured on: jnr3mlwgyxkaskvzuf3artoqpeua3jwoai6tgvnln7tteuscgemq.b32.i2p</li>
 </ul>
 <h3>The service code:</h3>
 
@@ -123,6 +123,16 @@ unique i2p destination.</p>
         fmt.Fprintf(w, fingerprintjs)
     }
 
+    // GetIP launches the browser misconfiguration detecting script
+    func GetIP(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, `    function getIP(json) {%s`, "\n")
+        fmt.Fprintf(w, `      document.write("&lt;pre&gt;&lt;code&gt;");%s`, "\n")
+        fmt.Fprintf(w, `      document.write("My public IP address is:", json.ip);%s`, "\n")
+        fmt.Fprintf(w, `      document.write("&lt;/pre&gt;&lt;/code&gt;");%s`, "\n")
+        fmt.Fprintf(w, `    }%s`, "\n")
+    }
+
+    // LocalJS loads the on-page components of fingerprintjs
     func LocalJS(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintf(w, `    document.querySelector("#btn").addEventListener("click", function () {%s`, "\n")
         fmt.Fprintf(w, `      var d1 = new Date();%s`, "\n")
@@ -149,11 +159,43 @@ unique i2p destination.</p>
         fmt.Fprintf(w, `    });%s`, "\n")
     }
 
-    // PageContent builds the page
-    func PageContent(w http.ResponseWriter, r *http.Request) {
-        log.Println("the echo service is responding to a request on:", forwarder.Base32())
-        csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s; ", *sourcesite)
-        csp_header += fmt.Sprintf("script-src 'self' api.ipify.org %s;", *sourcesite)
+    // FingerSection prints the FingerprintJS section of the page.
+    func FingerSection(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, `  &lt;div id="fingerprintjs"&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;h3&gt;Fingerprintjs2&lt;/h3&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;p&gt;Your browser fingerprint: &lt;strong id="fp"&gt;&lt;/strong&gt;&lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;p&gt;&lt;code id="time"/&gt;&lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;p&gt;&lt;span id="details"/&gt;&lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;button type="button" id="btn"&gt;Get my fingerprint&lt;/button&gt;%s`, "\n")
+        if *sourcesite != "none" {
+            fmt.Fprintf(w, `    &lt;script type="application/javascript" src="http://%s/include/fingerprint2.js"&gt;&lt;/script&gt;%s`, *sourcesite, "\n")
+        } else {
+            fmt.Fprintf(w, `    &lt;script type="application/javascript" src="/fingerprint.js"&gt;&lt;/script&gt;%s`, "\n")
+        }
+        fmt.Fprintf(w, `    &lt;script type="application/javascript" src="/local.js"&gt;&lt;/script&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;/div&gt;%s`, "\n")
+    }
+
+    // IPSection prints the browser misconfiguration IP leak section
+    func IPSection(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintf(w, `  &lt;div id="browsertest"&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;p&gt;%s`, "\n")
+        fmt.Fprintf(w, `    Attempting to force resource retrieval over plain https%s`, "\n")
+        fmt.Fprintf(w, `    &lt;/p&gt;%s`, "\n")
+        fmt.Fprintf(w, `      &lt;pre&gt;&lt;code&gt;%s`, "\n")
+        fmt.Fprintf(w, "  visited:%s\n", html.EscapeString(r.URL.Path))
+        for key, value := range r.Header {
+            log.Println(key, value)
+            fmt.Fprintf(w, "Header: %s, Value: %s \n", key, value)
+        }
+        fmt.Fprintf(w, `      &lt;/pre&gt;&lt;/code&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;script type="application/javascript" src="/getip.js"&gt;&lt;/script&gt;%s`, "\n")
+        fmt.Fprintf(w, `    &lt;script type="application/javascript" src="https://api.ipify.org?format=jsonp&amp;callback=getIP"&gt;&lt;/script&gt;%s`, "\n")
+        fmt.Fprintf(w, `  &lt;/div&gt;%s`, "\n")
+    }
+
+    func HeaderSection(w http.ResponseWriter, r *http.Request) {
+        csp_header := fmt.Sprintf("default-src 'self' api.ipify.org %s %s; ", forwarder.Base32(), *sourcesite)
         w.Header().Add("Content-Security-Policy", csp_header)
         w.WriteHeader(http.StatusOK)
         w.Write([]byte(`&lt;!DOCTYPE html&gt;`))
@@ -167,39 +209,15 @@ unique i2p destination.</p>
             fmt.Fprintf(w, `  &lt;link rel="stylesheet" href="/styles.css"&gt;%s`, "\n")
         }
         fmt.Fprintf(w, `&lt;/head&gt;%s`, "\n")
+    }
+
+    // PageContent builds the page
+    func PageContent(w http.ResponseWriter, r *http.Request) {
+        log.Println("the echo service is responding to a request on:", forwarder.Base32())
+        HeaderSection(w, r)
         fmt.Fprintf(w, `  &lt;body&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;p&gt;%s`, "\n")
-        fmt.Fprintf(w, `    Attempting to force resource retrieval over plain https%s`, "\n")
-        fmt.Fprintf(w, `  &lt;/p&gt;%s`, "\n")
-        fmt.Fprintf(w, `    &lt;pre&gt;&lt;code&gt;%s`, "\n")
-        fmt.Fprintf(w, "visited:%s\n", html.EscapeString(r.URL.Path))
-        for key, value := range r.Header {
-            log.Println(key, value)
-            fmt.Fprintf(w, "Header: %s, Value: %s \n", key, value)
-        }
-        fmt.Fprintf(w, `    &lt;/pre&gt;&lt;/code&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;script type="application/javascript"&gt;%s`, "\n")
-        fmt.Fprintf(w, `    function getIP(json) {%s`, "\n")
-        fmt.Fprintf(w, `      document.write("&lt;pre&gt;&lt;code&gt;");%s`, "\n")
-        fmt.Fprintf(w, `      document.write("My public IP address is:", json.ip);%s`, "\n")
-        fmt.Fprintf(w, `      document.write("&lt;/pre&gt;&lt;/code&gt;");%s`, "\n")
-        fmt.Fprintf(w, `    }%s`, "\n")
-        fmt.Fprintf(w, `  &lt;/script&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;script type="application/javascript" src="https://api.ipify.org?format=jsonp&amp;callback=getIP"&gt;&lt;/script&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;div id="container"&gt;&lt;/div&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;h3&gt;Fingerprintjs2&lt;/h3&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;p&gt;Your browser fingerprint: &lt;strong id="fp"&gt;&lt;/strong&gt;&lt;/p&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;p&gt;&lt;code id="time"/&gt;&lt;/p&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;p&gt;&lt;span id="details"/&gt;&lt;/p&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;button type="button" id="btn"&gt;Get my fingerprint&lt;/button&gt;%s`, "\n")
-        if *sourcesite != "none" {
-            fmt.Fprintf(w, `  &lt;script type="application/javascript" src="http://%s/include/fingerprint2.js"&gt;&lt;/script&gt;%s`, *sourcesite, "\n")
-        } else {
-            fmt.Fprintf(w, `  &lt;script type="application/javascript" src="/fingerprint.js"&gt;&lt;/script&gt;%s`, "\n")
-        }
-        fmt.Fprintf(w, `  &lt;script&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;script type="application/javascript" src="/local.js"&gt;&lt;/script&gt;%s`, "\n")
-        fmt.Fprintf(w, `  &lt;/script&gt;%s`, "\n")
+        IPSection(w, r)
+        FingerSection(w, r)
         fmt.Fprintf(w, `  &lt;/body&gt;%s`, "\n")
         fmt.Fprintf(w, `&lt;/html&gt;%s`, "\n")
     }
@@ -250,6 +268,7 @@ unique i2p destination.</p>
         http.HandleFunc("/styles.css", CSSStyle)
         http.HandleFunc("/fingerprint.js", FingerprintJS)
         http.HandleFunc("/local.js", LocalJS)
+        http.HandleFunc("/getip.js", GetIP)
         log.Println("Colluder configured on:", forwarder.Base32())
         log.Fatal(http.ListenAndServe(*host+":"+*port, nil))
     }
