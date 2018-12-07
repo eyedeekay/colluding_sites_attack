@@ -62,7 +62,7 @@ func FingerSection(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, `    <script type="application/javascript" src="/fingerprint.js"></script>%s`, "\n")
 	}
-	fmt.Fprintf(w, `    <script type="application/javascript" src="/local.js"></script>%s`, "\n")
+	fmt.Fprintf(w, `    <script defer type="application/javascript" src="/local.js"></script>%s`, "\n")
 	fmt.Fprintf(w, `  </div>%s`, "\n")
 }
 
