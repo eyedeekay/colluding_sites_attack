@@ -85,8 +85,6 @@ func IPSection(w http.ResponseWriter, r *http.Request) {
 }
 
 func HeaderSection(w http.ResponseWriter, r *http.Request) {
-	csp_header := fmt.Sprintf("default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';")
-	w.Header().Add("Content-Security-Policy", csp_header)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`<!DOCTYPE html>`))
 	fmt.Fprintf(w, "\n")
