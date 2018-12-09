@@ -7,6 +7,6 @@ gen=apg -n 1 -E '$(str)' -m 3 -x 3
 
 SAVE_README_LINES=17
 
-nameattacker:
+name:
 	@echo -n "attacker=" | tee attack
 	$(gen) | tee -a attack

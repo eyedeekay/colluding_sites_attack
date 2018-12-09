@@ -1,7 +1,7 @@
 
 GOPATH=$(PWD)/.go
 
-FINGERPRINT_RELEASE=1.8.0
+FINGERPRINT_RELEASE=2.0.0
 
 usage:
 	@echo 'usage:'
@@ -49,8 +49,9 @@ run-service: network run-volume
 		--network si \
 		--restart always \
 		--volumes-from collude-volume \
+		-p 127.0.0.1:9777:9777 \
 		eyedeekay/colluding_sites_attack_service
-	sleep 5
+	sleep 10
 	@echo -n "  * " | tee -a colluders.md
 	docker logs "collude-$(attacker)" | grep "b32.i2p" | head -n 1 | tee -a colluders.md
 
@@ -94,13 +95,19 @@ index: codemd
 	cat include/index.bottom.html >> index.html
 
 finger:
-	wget -qO include/fingerprint2.tar.gz https://github.com/Valve/fingerprintjs2/archive/$(FINGERPRINT_RELEASE).tar.gz
-	cd include/ && tar xvzf fingerprint2.tar.gz
-	cp "include/fingerprintjs2-$(FINGERPRINT_RELEASE)/fingerprint2.js" include/fingerprint2.js
-	rm -rf "include/fingerprintjs2-$(FINGERPRINT_RELEASE)"
+	wget -qO include/fingerprint2.js https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.0.3/fingerprint2.js
+
+	#wget -qO include/fingerprint2.tar.gz https://github.com/Valve/fingerprintjs2/archive/$(FINGERPRINT_RELEASE).tar.gz
+	#cd include/ && tar xvzf fingerprint2.tar.gz
+	#cp "include/fingerprintjs2-$(FINGERPRINT_RELEASE)/fingerprint2.js" include/fingerprint2.js
+	#rm -rf "include/fingerprintjs2-$(FINGERPRINT_RELEASE)"
 
 readme:
 	head -n $(SAVE_README_LINES) README.md > TEMPREADME.md
 	@echo "" >> TEMPREADME.md
 	cat TEMPREADME.md colluders.md > README.md
 	rm -f TEMPREADME.md
+
+tidy:
+	docker system prune -af; true
+	docker volume prune -f; true
