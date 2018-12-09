@@ -1,6 +1,8 @@
 
 GOPATH=$(PWD)/.go
 
+FINGERPRINT_RELEASE=1.8.0
+
 usage:
 	@echo 'usage:'
 	@echo '======'
@@ -92,7 +94,10 @@ index: codemd
 	cat include/index.bottom.html >> index.html
 
 finger:
-	wget -qO include/fingerprint2.js https://github.com/Valve/fingerprintjs2/raw/master/fingerprint2.js
+	wget -qO include/fingerprint2.tar.gz https://github.com/Valve/fingerprintjs2/archive/$(FINGERPRINT_RELEASE).tar.gz
+	cd include/ && tar xvzf fingerprint2.tar.gz
+	cp "include/fingerprintjs2-$(FINGERPRINT_RELEASE)/fingerprint2.js" include/fingerprint2.js
+	rm -rf "include/fingerprintjs2-$(FINGERPRINT_RELEASE)"
 
 readme:
 	head -n $(SAVE_README_LINES) README.md > TEMPREADME.md

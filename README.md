@@ -8,7 +8,7 @@ malicious purposes, and *any practical degradation of privacy of people seeking*
 *privacy is inherently malicous*. This is for *testing software for weaknesses*
 not for degrading privacy.
 
-  * [Fingerprintjs](https://github.com/valve/fingerprintjs2)
+  * [fingerprintjs2](https://github.com/valve/fingerprintjs2)
 
 It's not doing addressbook fingerprinting yet.
 
