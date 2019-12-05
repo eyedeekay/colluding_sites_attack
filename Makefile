@@ -78,8 +78,8 @@ diff:
 deps:
 	go get -u github.com/eyedeekay/sam-forwarder
 
-compile:
-	go build http-headers.go
+build: fmt
+	go build -o colluder/colluder ./colluder
 
 codemd:
 	@echo -n "        " > temp.md
@@ -95,12 +95,10 @@ index: codemd
 	cat include/index.bottom.html >> index.html
 
 finger:
-	wget -qO include/fingerprint2.js https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.0.3/fingerprint2.js
-
-	#wget -qO include/fingerprint2.tar.gz https://github.com/Valve/fingerprintjs2/archive/$(FINGERPRINT_RELEASE).tar.gz
-	#cd include/ && tar xvzf fingerprint2.tar.gz
-	#cp "include/fingerprintjs2-$(FINGERPRINT_RELEASE)/fingerprint2.js" include/fingerprint2.js
-	#rm -rf "include/fingerprintjs2-$(FINGERPRINT_RELEASE)"
+	#npm install fingerprintjs2
+	#cp node_modules/fingerprintjs2/fingerprint2.js include/fingerprint2.js
+	wget -qO include/client.js https://github.com/jackspirou/clientjs/raw/master/dist/client.min.js
+	#wget -qO include/fingerprint2.js https://raw.githubusercontent.com/Valve/fingerprintjs2/master/fingerprint2.js
 
 readme:
 	head -n $(SAVE_README_LINES) README.md > TEMPREADME.md
@@ -111,3 +109,10 @@ readme:
 tidy:
 	docker system prune -af; true
 	docker volume prune -f; true
+
+fmt:
+	gofmt -w *.go */*.go
+	prettier --write --use-tabs include/client.js include/local.js
+
+clean:
+	rm -rf *.i2pkeys
