@@ -1,13 +1,11 @@
 package echosam
 
 import (
-	"bufio"
 	"fmt"
 	"html"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 )
 
