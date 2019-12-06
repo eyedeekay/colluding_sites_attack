@@ -55,6 +55,15 @@ func (f *EchoSAM) CSSStyle(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "\n")
 }
 
+// WebRTC prints the contents of the CSS file
+func (f *EchoSAM) WebRTC(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	cbytes, _ := ioutil.ReadFile(f.RTCFile)
+	rtc := string(cbytes)
+	fmt.Fprintf(w, rtc)
+	fmt.Fprintf(w, "\n")
+}
+
 // FingerprintJS prints the contents of fingeprint.js
 func (f *EchoSAM) Fingerprint(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript")
@@ -152,6 +161,10 @@ func (f *EchoSAM) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if strings.HasSuffix(r.URL.Path, "finger.html") {
 		f.Finger(w, r)
+		return
+	}
+	if strings.HasSuffix(r.URL.Path, "webrtc.html") {
+		f.WebRTC(w, r)
 		return
 	}
 	if strings.HasSuffix(r.URL.Path, "report") {

@@ -15,6 +15,7 @@ type EchoSAM struct {
 	FingerprintJS string
 	FingerFile    string
 	LocalJS       string
+	RTCFile       string
 	CSS           string
 	up            bool
 }

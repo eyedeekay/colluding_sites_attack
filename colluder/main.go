@@ -53,6 +53,7 @@ var (
 	fingerprintjspath  = flag.String("finger", "./include/client.js", "Load fingerprintjs from this source file.")
 	jspath             = flag.String("js", "./include/local.js", "Load local javascript from this source file.")
 	fingerpath         = flag.String("page", "./include/index.html", "Use this fingerprinter page")
+	rtcpath            = flag.String("page", "./include/webrtc.html", "Use this webrtc page")
 	csspath            = flag.String("css", "./css/styles.css", "Load CSS file from this source file")
 )
 
@@ -121,6 +122,7 @@ func main() {
 		echosam.SetFingerJS(*fingerprintjspath),
 		echosam.SetLocalJS(*jspath),
 		echosam.SetFingerFile(*fingerpath),
+		echosam.SetWebRTC(*rtcpath),
 	)
 	if err != nil {
 		log.Fatal(err)

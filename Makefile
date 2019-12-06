@@ -98,6 +98,7 @@ finger:
 	#npm install fingerprintjs2
 	#cp node_modules/fingerprintjs2/fingerprint2.js include/fingerprint2.js
 	wget -qO include/client.js https://github.com/jackspirou/clientjs/raw/master/dist/client.min.js
+	wget -qO include/webrtc.html https://raw.githubusercontent.com/upsuper/webrtc-leaks/gh-pages/index.html
 	#wget -qO include/fingerprint2.js https://raw.githubusercontent.com/Valve/fingerprintjs2/master/fingerprint2.js
 
 readme:

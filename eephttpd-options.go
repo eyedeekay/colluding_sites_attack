@@ -461,3 +461,11 @@ func SetFingerFile(s string) func(*EchoSAM) error {
 		return nil
 	}
 }
+
+//SetWebRTC sets the path to save the config file at.
+func SetWebRTC(s string) func(*EchoSAM) error {
+	return func(c *EchoSAM) error {
+		c.RTCFile = s
+		return nil
+	}
+}
