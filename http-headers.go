@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"html"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -20,10 +21,7 @@ func (f *EchoSAM) Report(w http.ResponseWriter, r *http.Request) {
 // CSSStyle prints the contents of the CSS file
 func (f *EchoSAM) CSSStyle(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/css")
-	cbytes, err := ReadWithScanner(f.CSS)
-	if err != nil {
-		panic(err)
-	}
+	cbytes, _ := ioutil.ReadFile(f.CSS)
 	css := string(cbytes)
 	fmt.Fprintf(w, css)
 	fmt.Fprintf(w, "\n")
@@ -32,10 +30,7 @@ func (f *EchoSAM) CSSStyle(w http.ResponseWriter, r *http.Request) {
 // FingerprintJS prints the contents of fingeprint.js
 func (f *EchoSAM) Fingerprint(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript")
-	fbytes, err := ReadWithScanner(f.FingerprintJS)
-	if err != nil {
-		panic(err)
-	}
+	fbytes, _ := ioutil.ReadFile(f.FingerprintJS)
 	fingerprintjs := string(fbytes)
 	fmt.Fprintf(w, fingerprintjs)
 	fmt.Fprintf(w, "\n")
@@ -44,10 +39,7 @@ func (f *EchoSAM) Fingerprint(w http.ResponseWriter, r *http.Request) {
 // FingerprintJS prints the contents of fingeprint.js
 func (f *EchoSAM) Finger(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	f2bytes, err := ReadWithScanner(f.FingerFile)
-	if err != nil {
-		panic(err)
-	}
+	f2bytes, _ := ioutil.ReadFile(f.FingerFile)
 	fingerfile := string(f2bytes)
 	fmt.Fprintf(w, fingerfile)
 	fmt.Fprintf(w, "\n")
@@ -66,10 +58,10 @@ func (f *EchoSAM) GetIP(w http.ResponseWriter, r *http.Request) {
 // LocalJS loads the on-page components of fingerprintjs
 func (f *EchoSAM) Local(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript")
-	lbytes, err := ReadWithScanner(f.LocalJS)
-	if err != nil {
-		panic(err)
-	}
+	lbytes, _ := ioutil.ReadFile(f.LocalJS)
+	//if err != nil {
+	//panic(err)
+	//}
 	localjs := string(lbytes)
 	fmt.Fprintf(w, localjs)
 	fmt.Fprintf(w, "\n")
@@ -146,29 +138,4 @@ func (f *EchoSAM) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `  </body>%s`, "\n")
 	fmt.Fprintf(w, `</html>%s`, "\n")
 
-}
-
-func ReadWithScanner(fptr string) (string, error) {
-	f, err := os.Open(fptr)
-	if err != nil {
-		log.Fatal(err)
-		return "", err
-	}
-	defer func() {
-		if err = f.Close(); err != nil {
-			log.Fatal(err)
-		}
-	}()
-	s := bufio.NewScanner(f)
-	ret := ""
-	for s.Scan() {
-		fmt.Println(s.Text())
-		ret += s.Text()
-	}
-	err = s.Err()
-	if err != nil {
-		//log.Fatal(err)
-		return "", err
-	}
-	return ret, nil
 }
