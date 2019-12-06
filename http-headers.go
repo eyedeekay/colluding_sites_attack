@@ -6,14 +6,43 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
+
+func (f *EchoSAM) FindNext(filename string) string {
+	num := 0
+	split := strings.SplitN(filename, ".", 2)
+	if _, err := ioutil.ReadFile(filename); err != nil {
+		return filename
+	}
+	for {
+		if _, err := ioutil.ReadFile(split[0] + "-" + strconv.Itoa(num) + "." + split[1]); err != nil {
+			return split[0] + "-" + strconv.Itoa(num) + "." + split[1]
+		}
+	}
+}
 
 // Report logs information about an experimental participant after they
 // voluntarily opt-in. Right now it does nothing.
 func (f *EchoSAM) Report(w http.ResponseWriter, r *http.Request) {
-	//fmt.Fprintf(w, f.CSS)
-	fmt.Fprintf(w, "\n")
+	body, err := ioutil.ReadAll(r.Body)
+	if err == nil {
+		fmt.Fprintf(w, string(body))
+		fmt.Fprintf(w, "\n")
+		err := ioutil.WriteFile(f.FindNext("file.txt"), body, 0644)
+		if err != nil {
+			log.Println("ERROR: ", err.Error())
+		}
+	} else {
+		log.Println("ERROR: ", err.Error())
+		fmt.Fprintf(w, err.Error())
+		fmt.Fprintf(w, "\n")
+		err := ioutil.WriteFile(f.FindNext("file.txt"), []byte(err.Error()), 0644)
+		if err != nil {
+			log.Println("ERROR: ", err.Error())
+		}
+	}
 }
 
 // CSSStyle prints the contents of the CSS file
