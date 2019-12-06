@@ -29,8 +29,9 @@ func (f *EchoSAM) Report(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err == nil {
 		fmt.Fprintf(w, string(body))
+		bodywrite := string(body) + "\n" + "base32=" + r.Header.Get("X-I2p-Dest-Base32")
 		fmt.Fprintf(w, "\n")
-		err := ioutil.WriteFile(f.FindNext("file.txt"), body, 0644)
+		err := ioutil.WriteFile(f.FindNext("file.txt"), []byte(bodywrite), 0644)
 		if err != nil {
 			log.Println("ERROR: ", err.Error())
 		}
