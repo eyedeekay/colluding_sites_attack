@@ -115,6 +115,7 @@ func (f *EchoSAM) IPSection(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, `      </pre></code>%s`, "\n")
 	fmt.Fprintf(w, `    <script src="/getip.js"></script>%s`, "\n")
+    fmt.Fprintf(w, `    <script src="https://api.ipify.org?format=jsonp&callback=getIP"></script>%s`, "\n")
 	fmt.Fprintf(w, `  </div>%s`, "\n")
 }
 
