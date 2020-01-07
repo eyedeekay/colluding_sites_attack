@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo of WebRTC IP Address Leak</title>
+  <style>
+    h2 { font-size: 20px; }
+    ul { font-size: 16px; }
+    a { color: grey; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    footer { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h2>Your local IP addresses:</h2>
+  <ul id="local"></ul>
+  <h2>Your public IP addresses:</h2>
+  <ul id="public"></ul>
+
+  <iframe id="iframe" sandbox="allow-same-origin" style="display: none">
+  </iframe>
+  <script>
+    (function (iframe, callback) {
+      const EMPTY_FUNC = function () {};
+      var win = iframe.contentWindow;
+      var RTCPeerConnection = win.RTCPeerConnection
+        || win.mozRTCPeerConnection
+        || win.webkitRTCPeerConnection;
+
+      var mediaConstraints = {
+        optional: [{RtpDataChannels: true}]
+      };
+      var servers;
+      if (win.webkitRTCPeerConnection) {
+        servers = {
+          iceServers: [{urls: "stun:stun.services.mozilla.com"}]
+        };
+      }
+      var pc = new RTCPeerConnection(servers, mediaConstraints);
+      pc.createDataChannel("");
+      pc.createOffer(function (result) {
+        pc.setLocalDescription(result, EMPTY_FUNC, EMPTY_FUNC);
+      }, EMPTY_FUNC);
+
+      const SP = win.String.prototype;
+      const AP = win.Array.prototype;
+      win.setTimeout.call(window, function() {
+        var sdp = pc.localDescription.sdp;
+        var lines = SP.split.call(sdp, '\n');
+        var recorded = new win.Object;
+        var ips = new win.Array;
+        AP.forEach.call(lines, function (line) {
+          if (SP.indexOf.call(line, 'a=candidate:') == 0) {
+            var regexp = new win.RegExp('\\d{1,3}(\\.\\d{1,3}){3}');
+            var ip = regexp.exec(line)[0];
+            if (!recorded[ip]) {
+              recorded[ip] = true;
+              ips.push(ip);
+            }
+          }
+        });
+        callback(ips);
+      }, 1000);
+    })(iframe, function (ips) {
+      const LOCAL_LIST = document.getElementById('local');
+      const PUBLIC_LIST = document.getElementById('public');
+      for (var i = 0; i < ips.length; i++) {
+        var ip = ips[i];
+        var li = document.createElement('li');
+        li.textContent = ip;
+        var nums = ip.split('.').map(function (value) {
+          return parseInt(value);
+        });
+        if ( nums[0] ==  10 || nums[0] == 127  ||
+            (nums[0] == 169 && nums[1] == 254) ||
+              (nums[0] == 172 && nums[1] >=  16  && nums[1] <   32) ||
+                (nums[0] == 192 && nums[1] == 168)) {
+          LOCAL_LIST.appendChild(li);
+        } else {
+          PUBLIC_LIST.appendChild(li);
+        }
+      }
+    });
+  </script>
+
+  <footer>&copy; 2015 <a href="https://github.com/upsuper">upsuper</a></footer>
+  <a href="https://github.com/upsuper/webrtc-leaks"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+</body>
+</html>

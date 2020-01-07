@@ -5,3 +5,9 @@ colluders.md
 *.log
 .go
 README.md.asc
+*.i2pkeys
+package-lock.json
+node_modules
+artifacts
+go.sum
+*.txt
